@@ -8,7 +8,7 @@ import Signals.Reader;
  */
 public class ReaderTester {
 
-    public static void main(String args[]) {
+    public static void main(String args[]) {      
         if (Reader.openEDFFile("C:\\ECG.edf") == 0) {
             System.out.println("Open file successful");
         }

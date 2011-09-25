@@ -1,6 +1,7 @@
 package GUI;
 
 import Signals.Reader;
+import Transforms.DWT;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
@@ -150,6 +151,7 @@ public class ECGFrame extends javax.swing.JFrame {
         double[] samples = Reader.readSamples(signal, sigCount);
         Reader.closeEDFFile();
         
+//        graphPanel1.drawGraph(DWT.discreteHaarWaveletTransform(samples));
         graphPanel1.drawGraph(samples);
     }//GEN-LAST:event_drawButtonActionPerformed
 
