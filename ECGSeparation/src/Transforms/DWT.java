@@ -64,5 +64,4 @@ public class DWT {
             System.out.println("Discrete Haar WT " + i + ": " + dwt[i]);
         }
     }
-    
 }
