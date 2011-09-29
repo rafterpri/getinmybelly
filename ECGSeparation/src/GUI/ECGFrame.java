@@ -6,7 +6,6 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-import javax.swing.border.TitledBorder;
 
 /**
  *

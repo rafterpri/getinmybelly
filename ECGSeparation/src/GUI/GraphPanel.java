@@ -1,17 +1,22 @@
 package GUI;
 
-import info.monitorenter.gui.chart.Chart2D;
-import info.monitorenter.gui.chart.ITrace2D;
-import info.monitorenter.gui.chart.traces.Trace2DSimple;
-import java.util.Random;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  *
  * @author Tom Pepels - 25-9-2011
  */
-public class GraphPanel extends javax.swing.JPanel {
-
-    Chart2D chart;
+public class GraphPanel extends javax.swing.JPanel {    
+    
+    ChartPanel chart;
     
     /** Creates new form GraphPanel */
     public GraphPanel() {
@@ -20,6 +25,33 @@ public class GraphPanel extends javax.swing.JPanel {
 
     public void drawGraph(double[] data) {
         this.removeAll();
+        
+        XYSeries series1 = new XYSeries("dataLabel");
+        for(int i = 0; i < data.length; i++){
+            series1.add(i*0.01, data[i]);
+        }
+        
+        XYDataset plotData = new XYSeriesCollection(series1);
+
+        JFreeChart chartp = ChartFactory.createXYLineChart("Data", "X-Axis", "Y-Axis",
+                plotData, PlotOrientation.VERTICAL, false,
+                false, false);
+
+        NumberAxis axisX = new NumberAxis("X-Axis");
+        axisX.setAutoRange(true);
+
+        NumberAxis axisY = new NumberAxis("Y-Axis");
+        axisY.setAutoRange(true);
+
+        chart = new ChartPanel(chartp);
+
+        chart.setSize(this.getWidth(), this.getHeight());
+        chart.setLocation(0,0);
+        add(chart);        
+        revalidate();
+        repaint();
+
+        /*
         // Create a chart:  
         chart = new Chart2D();
         
@@ -32,11 +64,8 @@ public class GraphPanel extends javax.swing.JPanel {
             trace.addPoint(i, data[i]);
         }
         
-        chart.setSize(this.getWidth(), this.getHeight());
-        chart.setLocation(0,0);
-        add(chart);        
-        revalidate();
-        repaint();
+        */
+        
     }
 
     @SuppressWarnings("unchecked")
