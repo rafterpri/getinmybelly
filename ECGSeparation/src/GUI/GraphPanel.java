@@ -4,6 +4,7 @@ import java.awt.Color;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
@@ -68,8 +69,10 @@ public class GraphPanel extends javax.swing.JPanel {
                 plotData, PlotOrientation.VERTICAL, true,
                 true, true);
 
+        chart.setAntiAlias(true);
+
         xyPlot = chart.getXYPlot();
-        xyPlot.setBackgroundPaint(Color.lightGray);
+        xyPlot.setBackgroundPaint(Color.black);
         xyPlot.setDomainGridlinePaint(Color.white);
         xyPlot.setRangeGridlinePaint(Color.white);
         
