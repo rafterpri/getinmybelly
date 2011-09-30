@@ -15,6 +15,8 @@ import javax.swing.UIManager.LookAndFeelInfo;
 public class ECGFrame extends javax.swing.JFrame {
 
     private String selectedFile;
+    private double[] samples;
+    private String yAxis;
 
     /** Creates new form ECGFrame */
     public ECGFrame() {
@@ -41,6 +43,9 @@ public class ECGFrame extends javax.swing.JFrame {
         fileTextField = new javax.swing.JTextField();
         sigCountText = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        dwtWeightTxt = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
         graphPanel2 = new GUI.GraphPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -69,6 +74,18 @@ public class ECGFrame extends javax.swing.JFrame {
 
         jLabel2.setText("Signal count:");
 
+        jButton2.setText("Wavelet Transform");
+        jButton2.setEnabled(false);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        dwtWeightTxt.setText("2");
+
+        jLabel3.setText("DWT Weight:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -89,14 +106,23 @@ public class ECGFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(drawButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(369, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(dwtWeightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fileTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(jButton2)
+                    .addComponent(dwtWeightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -161,18 +187,23 @@ public class ECGFrame extends javax.swing.JFrame {
         Reader.openEDFFile(selectedFile);
         int signal = ((ComboItem) signalNamesList.getSelectedItem()).getId();
         int sigCount = Integer.parseInt(sigCountText.getText());
-        double[] samples = Reader.readSamples(signal, sigCount);
-        String yAxis = Reader.physicalDimension(signal);
+        samples = Reader.readSamples(signal, sigCount);
+        yAxis = Reader.physicalDimension(signal);
         String signalName = Reader.signalName(signal);
         Reader.closeEDFFile();
+        jButton2.setEnabled(true);
+        graphPanel1.drawGraph(samples, yAxis, signalName);
 
+    }//GEN-LAST:event_drawButtonActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        int wgt = Integer.parseInt(dwtWeightTxt.getText());
         double weight = Math.sqrt(2);
         Matrix result = DWT.waveletTransform(weight, samples);
         double[][] res = result.transpose().getArray();
         System.out.println(res[0].length);
-        graphPanel1.drawGraph(samples, yAxis, signalName);
         graphPanel2.drawGraph(res[0], yAxis, "DWT weight 2");
-    }//GEN-LAST:event_drawButtonActionPerformed
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     private void fillComboBox() {
         int signals = Reader.noOfSignals();
@@ -235,12 +266,15 @@ public class ECGFrame extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton drawButton;
+    private javax.swing.JTextField dwtWeightTxt;
     private javax.swing.JTextField fileTextField;
     private GUI.GraphPanel graphPanel1;
     private GUI.GraphPanel graphPanel2;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField sigCountText;
     private javax.swing.JComboBox signalNamesList;
