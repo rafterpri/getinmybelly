@@ -19,9 +19,26 @@ public class Reader {
     private static JNative readSamples;
     private static JNative signalName;
     private static JNative doubleSize;
+    private static JNative physicalDimension;
     private static boolean fileOpen = false;
     private static int sdouble = -1;
     
+        /**
+     * Returns the dimension (y axis name) for a signal
+     * @return int signal index
+     */
+    public static String physicalDimension(int signal) {
+        try {
+            physicalDimension = new JNative("ReadSignals.dll", "physicalDimension");
+            physicalDimension.setRetVal(Type.STRING);
+            physicalDimension.setParameter(0, signal);
+            physicalDimension.invoke();
+            return physicalDimension.getRetVal();
+        } catch (Exception ex) {
+            Logger.getLogger(Reader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
     
     /**
      * Returns the size of a native double. Since this will differ from java's size.

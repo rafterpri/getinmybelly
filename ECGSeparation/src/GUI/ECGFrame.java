@@ -2,7 +2,6 @@ package GUI;
 
 import Jama.Matrix;
 import Signals.Reader;
-import Transforms.DWT;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
@@ -149,6 +148,8 @@ public class ECGFrame extends javax.swing.JFrame {
         int signal = ((ComboItem)signalNamesList.getSelectedItem()).getId();
         int sigCount = Integer.parseInt(sigCountText.getText());
         double[] samples = Reader.readSamples(signal, sigCount);
+        String yAxis = Reader.physicalDimension(signal);
+        String signalName = Reader.signalName(signal);
         Reader.closeEDFFile();
         
 //        double weight = Math.sqrt(2);
@@ -156,7 +157,7 @@ public class ECGFrame extends javax.swing.JFrame {
 //        double[][] res = result.transpose().getArray();
 //        System.out.println(res[0].length);
 //        graphPanel1.drawGraph(res[0]);
-        graphPanel1.drawGraph(samples);
+        graphPanel1.drawGraph(samples, yAxis, signalName);
     }//GEN-LAST:event_drawButtonActionPerformed
 
     private void fillComboBox() {

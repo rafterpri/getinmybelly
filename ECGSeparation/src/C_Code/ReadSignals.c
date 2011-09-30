@@ -37,6 +37,14 @@ char* signalName(int signal) {
     }
 }
 
+char* physicalDimension(int signal) {
+        if (hdr_p != NULL) {
+        return hdr_p->signalparam[signal].physdimension;
+    } else {
+        return "";
+    }
+}
+
 int doubleSize() {
     return sizeof(double);
 }

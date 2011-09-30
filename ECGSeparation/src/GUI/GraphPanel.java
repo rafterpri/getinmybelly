@@ -1,11 +1,13 @@
 package GUI;
 
-
+import java.awt.Color;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.category.CategoryItemRenderer;
+import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -14,46 +16,75 @@ import org.jfree.data.xy.XYSeriesCollection;
  *
  * @author Tom Pepels - 25-9-2011
  */
-public class GraphPanel extends javax.swing.JPanel {    
-    
-    ChartPanel chart;
-    
+public class GraphPanel extends javax.swing.JPanel {
+
+    ChartPanel chartPanel;
+    JFreeChart chart;
+    XYPlot xyPlot;
+    int datasets = 1;
+
     /** Creates new form GraphPanel */
     public GraphPanel() {
         initComponents();
     }
-    
-    public void addGraph(double[] data) {
 
+    /**
+     * Adds a graph to the existing graphpanel.
+     * @param data Data to add
+     * @param signalName Name of the data
+     */
+    public void addGraph(double[] data, String signalName) {
+        datasets++;
+        XYSeries series1 = new XYSeries(signalName);
+        for (int i = 0; i < data.length; i++) {
+            series1.add(i, data[i]);
+        }
+
+        XYDataset plotData = new XYSeriesCollection(series1);
+        xyPlot.setDataset(datasets, plotData);
+        xyPlot.setRenderer(datasets, new StandardXYItemRenderer());
     }
 
-    public void drawGraph(double[] data) {
+    /**
+     * Draw the initial graph.
+     * @param data
+     * @param yAxis
+     * @param signalName 
+     */
+    public void drawGraph(double[] data, String yAxis, String signalName) {
         this.removeAll();
-        
-        XYSeries series1 = new XYSeries("dataLabel");
-        for(int i = 0; i < data.length; i++){
-            series1.add(i*0.01, data[i]);
+
+        XYSeries series1 = new XYSeries(signalName);
+        XYSeries zeroLine = new XYSeries("Zero");
+        for (int i = 0; i < data.length; i++) {
+            series1.add(i, data[i]);
+            zeroLine.add(i, 0);
         }
-        
+
         XYDataset plotData = new XYSeriesCollection(series1);
+        XYDataset zero = new XYSeriesCollection(zeroLine);
 
-        JFreeChart chartp = ChartFactory.createXYLineChart("Data", "X-Axis", "Y-Axis",
-                plotData, PlotOrientation.VERTICAL, false,
-                false, false);
+        chart = ChartFactory.createXYLineChart(signalName, "", yAxis,
+                plotData, PlotOrientation.VERTICAL, true,
+                true, true);
 
-        NumberAxis axisX = new NumberAxis("X-Axis");
-        axisX.setAutoRange(true);
+        xyPlot = chart.getXYPlot();
+        xyPlot.setBackgroundPaint(Color.lightGray);
+        xyPlot.setDomainGridlinePaint(Color.white);
+        xyPlot.setRangeGridlinePaint(Color.white);
+        
+        xyPlot.getDomainAxis().setTickLabelsVisible(false);
+        xyPlot.getRangeAxis().setAutoRange(true);
 
-        NumberAxis axisY = new NumberAxis("Y-Axis");
-        axisY.setAutoRange(true);
+        xyPlot.setDataset(1, zero);
+        xyPlot.setRenderer(1, new StandardXYItemRenderer());
 
-        chart = new ChartPanel(chartp);
-
-        chart.setSize(this.getWidth(), this.getHeight());
-        chart.setLocation(0,0);
-        add(chart);        
-        revalidate();
+        chartPanel = new ChartPanel(chart);
+        chartPanel.setSize(this.getWidth(), this.getHeight());
+        chartPanel.setLocation(0, 0);
+        add(chartPanel);
         repaint();
+        revalidate();
     }
 
     @SuppressWarnings("unchecked")
@@ -79,11 +110,10 @@ public class GraphPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
-        if (chart != null) {
-            chart.setSize(this.getWidth(), this.getHeight());
+        if (chartPanel != null) {
+            chartPanel.setSize(this.getWidth(), this.getHeight());
         }
     }//GEN-LAST:event_formComponentResized
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }
