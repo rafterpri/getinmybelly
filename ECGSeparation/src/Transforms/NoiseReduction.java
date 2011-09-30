@@ -15,12 +15,14 @@ public class NoiseReduction {
      * @param threshold the noise reduction threshold
      */
     public static Matrix reduceNoise(Matrix A, Matrix W, double threshold) {
-        for(int i = 0; i < A.getArray()[0].length; i++) {
-            if (A.get(0, i) < threshold) {
+        A = A.transpose();
+        int len = A.getArray()[0].length;
+        for(int i = 0; i < len; i++) {
+            if (Math.abs(A.get(0, i)) < threshold) {
                 A.set(0, i, 0);
             }
         }
-        // Matrix T = A.transpose();
+        A = A.transpose();
         return (W.inverse().times(A));
     }
 }
