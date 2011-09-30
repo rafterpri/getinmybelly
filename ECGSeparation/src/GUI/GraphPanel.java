@@ -22,6 +22,10 @@ public class GraphPanel extends javax.swing.JPanel {
     public GraphPanel() {
         initComponents();
     }
+    
+    public void addGraph(double[] data) {
+
+    }
 
     public void drawGraph(double[] data) {
         this.removeAll();
@@ -50,22 +54,6 @@ public class GraphPanel extends javax.swing.JPanel {
         add(chart);        
         revalidate();
         repaint();
-
-        /*
-        // Create a chart:  
-        chart = new Chart2D();
-        
-        // Create an ITrace: 
-        ITrace2D trace = new Trace2DSimple();
-        // Add the trace to the chart. This has to be done before adding points (deadlock prevention): 
-        chart.addTrace(trace);
-        
-        for (int i = 0; i < data.length; i++) {
-            trace.addPoint(i, data[i]);
-        }
-        
-        */
-        
     }
 
     @SuppressWarnings("unchecked")

@@ -1,7 +1,6 @@
 package GUI;
 
 import Signals.Reader;
-import Transforms.DWT;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
