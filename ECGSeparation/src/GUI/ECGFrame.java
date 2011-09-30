@@ -89,7 +89,7 @@ public class ECGFrame extends javax.swing.JFrame {
 
         jLabel3.setText("DWT Weight:");
 
-        thresholdTxt.setText("1");
+        thresholdTxt.setText("0.5");
 
         jButton3.setText("Noise reduction");
         jButton3.setEnabled(false);
@@ -234,7 +234,7 @@ public class ECGFrame extends javax.swing.JFrame {
         int wgt = Integer.parseInt(dwtWeightTxt.getText());
         double weight = Math.sqrt(wgt);
         Matrix result = DWT.waveletTransform(weight, samples);
-        double t = Integer.parseInt(thresholdTxt.getText());
+        double t = Double.parseDouble(thresholdTxt.getText());
         Matrix newA = NoiseReduction.reduceNoise(result, DWT.createW(weight, samples.length), t);
         double[][] res = newA.transpose().getArray();
         graphPanel2.drawGraph(res[0], "Noise threshold: " + thresholdTxt.getText(), "Noise");
