@@ -46,6 +46,9 @@ public class ECGFrame extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         dwtWeightTxt = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        thresholdTxt = new javax.swing.JTextField();
+        jButton3 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
         graphPanel2 = new GUI.GraphPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -86,6 +89,18 @@ public class ECGFrame extends javax.swing.JFrame {
 
         jLabel3.setText("DWT Weight:");
 
+        thresholdTxt.setText("1");
+
+        jButton3.setText("Noise reduction");
+        jButton3.setEnabled(false);
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Threshold:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -107,11 +122,17 @@ public class ECGFrame extends javax.swing.JFrame {
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(drawButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
-                .addComponent(jLabel3)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dwtWeightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(thresholdTxt, 0, 0, Short.MAX_VALUE)
+                    .addComponent(dwtWeightTxt, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -129,7 +150,10 @@ public class ECGFrame extends javax.swing.JFrame {
                     .addComponent(signalNamesList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(sigCountText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(drawButton))
+                    .addComponent(drawButton)
+                    .addComponent(thresholdTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3)
+                    .addComponent(jLabel4))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -156,14 +180,14 @@ public class ECGFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 246, Short.MAX_VALUE)
-                .addComponent(graphPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 262, Short.MAX_VALUE)
+                .addComponent(graphPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(122, 122, 122)
-                    .addComponent(graphPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(273, Short.MAX_VALUE)))
+                    .addComponent(graphPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(326, Short.MAX_VALUE)))
         );
 
         pack();
@@ -192,18 +216,29 @@ public class ECGFrame extends javax.swing.JFrame {
         String signalName = Reader.signalName(signal);
         Reader.closeEDFFile();
         jButton2.setEnabled(true);
+        jButton3.setEnabled(true);
         graphPanel1.drawGraph(samples, yAxis, signalName);
 
     }//GEN-LAST:event_drawButtonActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         int wgt = Integer.parseInt(dwtWeightTxt.getText());
-        double weight = Math.sqrt(2);
+        double weight = Math.sqrt(wgt);
         Matrix result = DWT.waveletTransform(weight, samples);
         double[][] res = result.transpose().getArray();
         System.out.println(res[0].length);
         graphPanel2.drawGraph(res[0], yAxis, "DWT weight 2");
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        int wgt = Integer.parseInt(dwtWeightTxt.getText());
+        double weight = Math.sqrt(wgt);
+        Matrix result = DWT.waveletTransform(weight, samples);
+        double t = Integer.parseInt(thresholdTxt.getText());
+        Matrix newA = NoiseReduction.reduceNoise(result, DWT.createW(weight, samples.length), t);
+        double[][] res = newA.transpose().getArray();
+        graphPanel2.drawGraph(res[0], "Noise threshold: " + thresholdTxt.getText(), "Noise");
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     private void fillComboBox() {
         int signals = Reader.noOfSignals();
@@ -272,11 +307,14 @@ public class ECGFrame extends javax.swing.JFrame {
     private GUI.GraphPanel graphPanel2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField sigCountText;
     private javax.swing.JComboBox signalNamesList;
+    private javax.swing.JTextField thresholdTxt;
     // End of variables declaration//GEN-END:variables
 }

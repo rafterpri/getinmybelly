@@ -72,7 +72,7 @@ public class DWT {
      * @param n length of the input vector
      * @return 
      */
-    private static Matrix createW(double w, int n) {
+    public static Matrix createW(double w, int n) {
         double[][] matrix = new double[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
