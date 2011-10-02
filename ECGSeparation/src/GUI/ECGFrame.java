@@ -4,6 +4,7 @@ import Jama.Matrix;
 import Transforms.*;
 import Signals.Reader;
 import java.io.File;
+import java.util.Arrays;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -34,6 +35,7 @@ public class ECGFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        transformButtonGroup = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         signalNamesList = new javax.swing.JComboBox();
@@ -48,6 +50,10 @@ public class ECGFrame extends javax.swing.JFrame {
         thresholdTxt = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        haarRadioButton = new javax.swing.JRadioButton();
+        d4RadioButton = new javax.swing.JRadioButton();
+        fourierRadioButton = new javax.swing.JRadioButton();
         jPanel2 = new javax.swing.JPanel();
         graphPanel2 = new GUI.GraphPanel();
         graphPanel1 = new GUI.GraphPanel();
@@ -100,6 +106,40 @@ public class ECGFrame extends javax.swing.JFrame {
 
         jLabel4.setText("Threshold:");
 
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Wavelet Transform"));
+
+        transformButtonGroup.add(haarRadioButton);
+        haarRadioButton.setSelected(true);
+        haarRadioButton.setText("Haar");
+
+        transformButtonGroup.add(d4RadioButton);
+        d4RadioButton.setText("Daubechies D4");
+
+        transformButtonGroup.add(fourierRadioButton);
+        fourierRadioButton.setText("Fourier");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(haarRadioButton)
+                    .addComponent(d4RadioButton)
+                    .addComponent(fourierRadioButton))
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(haarRadioButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(d4RadioButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fourierRadioButton))
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -119,41 +159,51 @@ public class ECGFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(drawButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 213, Short.MAX_VALUE)
+                    .addComponent(drawButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(thresholdTxt, 0, 0, Short.MAX_VALUE)
-                    .addComponent(dwtWeightTxt, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE))
+                    .addComponent(dwtWeightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton2)
                     .addComponent(jButton3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(fileTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(dwtWeightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(signalNamesList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(sigCountText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(drawButton)
-                    .addComponent(thresholdTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3)
-                    .addComponent(jLabel4))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jButton2)
+                                .addComponent(dwtWeightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel3))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(thresholdTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton3)
+                                .addComponent(jLabel4)))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(fileTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton1))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel1)
+                                .addComponent(signalNamesList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel2)
+                                .addComponent(sigCountText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(drawButton))))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         jPanel2.setBackground(new java.awt.Color(51, 0, 51));
@@ -171,11 +221,11 @@ public class ECGFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 892, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 874, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -184,7 +234,7 @@ public class ECGFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 503, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -220,28 +270,54 @@ public class ECGFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_drawButtonActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        int wgt = Integer.parseInt(dwtWeightTxt.getText());
-        double weight = Math.sqrt(wgt);
-        Matrix result = DWT.waveletTransform(weight, samples);
-        double[][] res = result.transpose().getArray();
-        System.out.println(res[0].length);
-        graphPanel2.drawGraph(res[0], yAxis, "DWT weight 2");
+        graphPanel2.drawGraph(doTransform(), yAxis, "Wavelet Transform");
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         double t = Double.parseDouble(thresholdTxt.getText());
-        
-        /* int wgt = Integer.parseInt(dwtWeightTxt.getText());
-        double weight = Math.sqrt(wgt);
-        Matrix result = DWT.waveletTransform(weight, samples);
-        
-        Matrix newA = NoiseReduction.reduceNoise(result, DWT.createW(weight, samples.length), t);
-        double[][] res = newA.transpose().getArray(); */
-        
-        double[] newSig = NoiseReduction.reduceNoiseD4(samples, t);
-        
-        graphPanel2.drawGraph(newSig, "Noise threshold: " + thresholdTxt.getText(), "Noise");
+        double[] trans = doTransform();
+        double[] newSigH = NoiseReduction.reduceNoiseHardT(trans, t);
+        double[] newSigS = NoiseReduction.reduceNoiseSoftT(trans, t);
+        graphPanel2.drawGraph(doInvTransform(newSigH), yAxis, "Hard Threshold: " + thresholdTxt.getText());
+        graphPanel2.addGraph(doInvTransform(newSigS), "Soft Threshold: " + thresholdTxt.getText());
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private double[] doTransform() {
+        if (haarRadioButton.isSelected()) {
+
+            int wgt = Integer.parseInt(dwtWeightTxt.getText());
+            double weight = Math.sqrt(wgt);
+            Matrix result = DWT.waveletTransform(weight, samples);
+            return result.transpose().getArray()[0];
+
+        } else if (d4RadioButton.isSelected()) {
+
+            double[] newSig = Arrays.copyOf(samples, samples.length);
+            DWT.d4Transform(newSig);
+            return newSig;
+
+        } else { //Fourier here!
+            return new double[0];
+        }
+    }
+
+    private double[] doInvTransform(double[] signal) {
+        if (haarRadioButton.isSelected()) {
+
+            int wgt = Integer.parseInt(dwtWeightTxt.getText());
+            double weight = Math.sqrt(wgt);
+            return DWT.inverseHaarWaveletTransform(signal, weight);
+
+        } else if (d4RadioButton.isSelected()) {
+
+            double[] newSig = Arrays.copyOf(signal, signal.length);
+            DWT.invD4Transform(newSig);
+            return newSig;
+            
+        } else { //Fourier here!
+            return new double[0];
+        }
+    }
 
     private void fillComboBox() {
         int signals = Reader.noOfSignals();
@@ -303,11 +379,14 @@ public class ECGFrame extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton d4RadioButton;
     private javax.swing.JButton drawButton;
     private javax.swing.JTextField dwtWeightTxt;
     private javax.swing.JTextField fileTextField;
+    private javax.swing.JRadioButton fourierRadioButton;
     private GUI.GraphPanel graphPanel1;
     private GUI.GraphPanel graphPanel2;
+    private javax.swing.JRadioButton haarRadioButton;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -317,8 +396,10 @@ public class ECGFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JTextField sigCountText;
     private javax.swing.JComboBox signalNamesList;
     private javax.swing.JTextField thresholdTxt;
+    private javax.swing.ButtonGroup transformButtonGroup;
     // End of variables declaration//GEN-END:variables
 }

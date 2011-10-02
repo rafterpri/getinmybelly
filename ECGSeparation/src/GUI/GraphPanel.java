@@ -40,8 +40,9 @@ public class GraphPanel extends javax.swing.JPanel {
         for (int i = 0; i < data.length; i++) {
             series1.add(i, data[i]);
         }
-
+        
         XYDataset plotData = new XYSeriesCollection(series1);
+        
         xyPlot.setDataset(datasets, plotData);
         xyPlot.setRenderer(datasets, new StandardXYItemRenderer());
     }
