@@ -229,13 +229,18 @@ public class ECGFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        int wgt = Integer.parseInt(dwtWeightTxt.getText());
+        double t = Double.parseDouble(thresholdTxt.getText());
+        
+        /* int wgt = Integer.parseInt(dwtWeightTxt.getText());
         double weight = Math.sqrt(wgt);
         Matrix result = DWT.waveletTransform(weight, samples);
-        double t = Double.parseDouble(thresholdTxt.getText());
+        
         Matrix newA = NoiseReduction.reduceNoise(result, DWT.createW(weight, samples.length), t);
-        double[][] res = newA.transpose().getArray();
-        graphPanel2.drawGraph(res[0], "Noise threshold: " + thresholdTxt.getText(), "Noise");
+        double[][] res = newA.transpose().getArray(); */
+        
+        double[] newSig = NoiseReduction.reduceNoiseD4(samples, t);
+        
+        graphPanel2.drawGraph(newSig, "Noise threshold: " + thresholdTxt.getText(), "Noise");
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void fillComboBox() {

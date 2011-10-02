@@ -76,7 +76,7 @@ public class GraphPanel extends javax.swing.JPanel {
         xyPlot.setDomainGridlinePaint(Color.white);
         xyPlot.setRangeGridlinePaint(Color.white);
         
-        xyPlot.getDomainAxis().setTickLabelsVisible(false);
+        //xyPlot.getDomainAxis().setTickLabelsVisible(false);
         xyPlot.getRangeAxis().setAutoRange(true);
 
         xyPlot.setDataset(1, zero);
