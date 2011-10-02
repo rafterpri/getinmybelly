@@ -40,4 +40,26 @@ public class NoiseReduction {
         }
         return sig2;
     }
+    
+    public static double[] reduceNoiseDynamicT(double signal[], double[] coefficients) {
+        double[] sorted = bubbleSort(coefficients);
+        double median = sorted[(int)sorted.length/2];
+        double delta = median/0.6745;
+        double threshold = delta*Math.sqrt(Math.log(signal.length));
+        System.out.println("Dynamic Threshold = "+threshold);
+        return reduceNoiseHardT(signal, threshold);
+    }
+    
+    public static double[] bubbleSort(double[] input) {
+        for(int i = 0 ; i < input.length ; i++) {
+            for(int j = i ; j < input.length ; j++) {
+                if(input[i] > input[j]) {
+                    double help = input[i];
+                    input[i] = input[j];
+                    input[j] = help;
+                }
+            }
+        }
+        return input;
+    }
 }

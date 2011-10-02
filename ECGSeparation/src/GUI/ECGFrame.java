@@ -14,7 +14,13 @@ import javax.swing.UIManager.LookAndFeelInfo;
  * @author Tom Pepels - 25-9-2011
  */
 public class ECGFrame extends javax.swing.JFrame {
-
+    
+    // Daubechies D4 wavelet coefficients
+    private final static double h0 = (1 + Math.sqrt(3)) / (4 * Math.sqrt(2));
+    private final static double h1 = (3 + Math.sqrt(3)) / (4 * Math.sqrt(2));
+    private final static double h2 = (3 - Math.sqrt(3)) / (4 * Math.sqrt(2));
+    private final static double h3 = (1 - Math.sqrt(3)) / (4 * Math.sqrt(2));
+    private static double[] daubs = new double[]{h0,h1,h2,h3};
     private String selectedFile;
     private double[] samples;
     private String yAxis;
@@ -278,8 +284,10 @@ public class ECGFrame extends javax.swing.JFrame {
         double[] trans = doTransform();
         double[] newSigH = NoiseReduction.reduceNoiseHardT(trans, t);
         double[] newSigS = NoiseReduction.reduceNoiseSoftT(trans, t);
-        graphPanel2.drawGraph(doInvTransform(newSigH), yAxis, "Hard Threshold: " + thresholdTxt.getText());
-        graphPanel2.addGraph(doInvTransform(newSigS), "Soft Threshold: " + thresholdTxt.getText());
+        double[] newSigD = NoiseReduction.reduceNoiseDynamicT(trans, daubs);
+        graphPanel2.drawGraph(doInvTransform(newSigD), yAxis, "Dynamic Threshold");      
+//        graphPanel2.drawGraph(doInvTransform(newSigH), yAxis, "Hard Threshold: " + thresholdTxt.getText());
+//        graphPanel2.addGraph(doInvTransform(newSigS), "Soft Threshold: " + thresholdTxt.getText());
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private double[] doTransform() {
