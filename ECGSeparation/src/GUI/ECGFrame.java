@@ -276,8 +276,8 @@ public class ECGFrame extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         double t = Double.parseDouble(thresholdTxt.getText());
         double[] trans = doTransform();
-        double[] newSigH = NoiseReduction.reduceNoiseHardT(trans, t);
-        double[] newSigS = NoiseReduction.reduceNoiseSoftT(trans, t);
+        // double[] newSigH = NoiseReduction.reduceNoiseHardT(trans, t);
+        // double[] newSigS = NoiseReduction.reduceNoiseSoftT(trans, t);
         double[] newSigD = NoiseReduction.reduceNoiseDynamicT(trans);
         graphPanel2.drawGraph(doInvTransform(newSigD), yAxis, "Dynamic Threshold");      
 //        graphPanel2.drawGraph(doInvTransform(newSigH), yAxis, "Hard Threshold: " + thresholdTxt.getText());
