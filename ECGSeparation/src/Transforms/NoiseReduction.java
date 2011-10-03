@@ -53,6 +53,29 @@ public class NoiseReduction {
         return reduceNoiseHardT(signal, threshold);
     }
     
+    public static double[] reduceNoiseTomsWay(double signal[]) {
+        double[] inputSecondPart = Arrays.copyOfRange(signal, signal.length/2, signal.length);
+        double[] inputFirstPart = Arrays.copyOfRange(signal, 0, (signal.length/2));
+        double[] sorted = bubbleSort(inputSecondPart);
+        double median = Math.abs(sorted[(int)sorted.length/2]);
+        double delta = median/0.6745;
+        
+        double threshold = delta*Math.sqrt(Math.log(inputSecondPart.length));
+
+        System.out.println("Dynamic Threshold = "+threshold);
+        double[] noiseReducedSecondPart = reduceNoiseHardT(inputSecondPart, threshold);
+        double[] output = new double[signal.length];
+        for (int i = 0; i < signal.length; i++) {
+            if(i<  signal.length/2)
+                output[i] = inputFirstPart[i];
+            else {
+                output[i] = noiseReducedSecondPart[i-signal.length/2];
+            }
+            
+        }
+        return output;
+    }
+    
     public static double[] bubbleSort(double[] signal) {
         double[] input = Arrays.copyOf(signal, signal.length);
         for(int i = 0 ; i < input.length ; i++) {
