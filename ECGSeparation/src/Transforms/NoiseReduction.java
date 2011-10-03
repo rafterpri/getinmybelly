@@ -44,9 +44,9 @@ public class NoiseReduction {
     public static double[] reduceNoiseDynamicT(double signal[]) {
         
         double[] sorted = bubbleSort(signal);
-        double median = sorted[(int)sorted.length/2];
+        double median = Math.abs(sorted[(int)sorted.length/2]);
         double delta = median/0.6745;
-
+        
         double threshold = delta*Math.sqrt(Math.log(signal.length));
 
         System.out.println("Dynamic Threshold = "+threshold);
@@ -57,7 +57,7 @@ public class NoiseReduction {
         double[] input = Arrays.copyOf(signal, signal.length);
         for(int i = 0 ; i < input.length ; i++) {
             for(int j = i ; j < input.length ; j++) {
-                if(input[i] > input[j]) {
+                if(Math.abs(input[i]) > Math.abs(input[j])) {
                     double help = input[i];
                     input[i] = input[j];
                     input[j] = help;
