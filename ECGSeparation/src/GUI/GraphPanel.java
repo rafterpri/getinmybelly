@@ -1,13 +1,12 @@
 package GUI;
 
 import java.awt.Color;
+import java.awt.Paint;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
@@ -57,7 +56,7 @@ public class GraphPanel extends javax.swing.JPanel {
         this.removeAll();
 
         XYSeries series1 = new XYSeries(signalName);
-        XYSeries zeroLine = new XYSeries("Zero");
+        XYSeries zeroLine = new XYSeries("");
         for (int i = 0; i < data.length; i++) {
             series1.add(i, data[i]);
             zeroLine.add(i, 0);
@@ -76,12 +75,9 @@ public class GraphPanel extends javax.swing.JPanel {
         xyPlot.setBackgroundPaint(Color.black);
         xyPlot.setDomainGridlinePaint(Color.white);
         xyPlot.setRangeGridlinePaint(Color.white);
-        
-        //xyPlot.getDomainAxis().setTickLabelsVisible(false);
+        xyPlot.setRangeZeroBaselinePaint(Color.white);
         xyPlot.getRangeAxis().setAutoRange(true);
-
-        xyPlot.setDataset(1, zero);
-        xyPlot.setRenderer(1, new StandardXYItemRenderer());
+        xyPlot.setRangeZeroBaselineVisible(true);
 
         chartPanel = new ChartPanel(chart);
         chartPanel.setSize(this.getWidth(), this.getHeight());

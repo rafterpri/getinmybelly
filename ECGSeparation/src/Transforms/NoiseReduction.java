@@ -69,8 +69,10 @@ public class NoiseReduction {
                 m[l] = signal[k];
                 l++;
             }
+            
+            //System.out.println("Smaller i: " + i + ", n: " + n);
             // At the end use the final signal multiple times.
-        } else if ((i + n / 2) >= signal.length) {
+        } else if ((i + (n / 2)) >= signal.length) {
 
             for (int k = i - (n / 2); k <= i; k++) {
                 m[l] = signal[k];
@@ -81,12 +83,21 @@ public class NoiseReduction {
                 m[l] = signal[i];
                 l++;
             }
-
+            
+            //System.out.println("Bigger i: " + i + ", n: " + n);
         } else {
-            for (int k = i - (n / 2); k < i + (n / 2); k++) {
+            int max = 0;
+            if(n % 2 == 0) {
+                max = i + (n / 2) - 1;
+            } else {
+                max = i + (n / 2);
+            }
+            
+            for (int k = i - (n / 2); k <= max; k++) {
                 m[l] = signal[k];
                 l++;
             }
+            //System.out.println(l);
         }
         return m;
     }

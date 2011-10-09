@@ -95,7 +95,7 @@ public class ECGFrame extends javax.swing.JFrame {
             }
         });
 
-        sigCountText.setText("1000");
+        sigCountText.setText("2048");
 
         jLabel2.setText("Signal count:");
 
@@ -456,7 +456,7 @@ public class ECGFrame extends javax.swing.JFrame {
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
         readSamples();
-        drawGraph(signalName, false);
+        //drawGraph(signalName, false);
     }//GEN-LAST:event_resetButtonActionPerformed
 
     private void clear1ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clear1ButtonActionPerformed
