@@ -8,10 +8,6 @@ import java.util.Arrays;
  */
 public class NoiseReduction {
 
-    private static double median(double[] input) {
-        return input[(input.length / 2)];
-    }
-
     /**
      * Smoothes the signal by substituting the each value with the median of nearest n values.
      * @param signal
@@ -22,43 +18,77 @@ public class NoiseReduction {
         double[] output = Arrays.copyOf(signal, signal.length);
 
         for (int i = 0; i < signal.length; i++) {
-            double[] m = new double[n];
-            int l = 0;
-
-            // At the start of the signal array use the first values multiple times
-            if (i < (n / 2)) {
-
-                while (l < (n / 2)) {
-                    m[l] = signal[i];
-                    l++;
-                }
-
-                for (int k = i; k < i + (n / 2); k++) {
-                    m[l] = signal[k];
-                    l++;
-                }
-            } else if ((i + n / 2) >= signal.length) {
-
-                for (int k = i - (n / 2); k <= i; k++) {
-                    m[l] = signal[k];
-                    l++;
-                }
-
-                while (l < (n / 2)) {
-                    m[l] = signal[i];
-                    l++;
-                }
-
-            } else {
-                for (int k = i - (n / 2); k < i + (n / 2); k++) {
-                    m[l] = signal[k];
-                    l++;
-                }
-            }
+            double[] m = subSignal(signal, i, n);
             inPlaceBubbleSort(m);
             output[i] = median(m);
         }
         return output;
+    }
+
+    /**
+     * Smoothes the signal by substituting the each value with the mean of nearest n values.
+     * @param signal
+     * @param n
+     * @return 
+     */
+    public static double[] meanFilter(double signal[], int n) {
+        double[] output = Arrays.copyOf(signal, signal.length);
+
+        for (int i = 0; i < signal.length; i++) {
+            double[] m = subSignal(signal, i, n);
+            output[i] = mean(m);
+        }
+        return output;
+    }
+
+    private static double median(double[] input) {
+        return input[(input.length / 2)];
+    }
+
+    private static double mean(double[] input) {
+        double sum = 0;
+        for (int i = 0; i < input.length; i++) {
+            sum += input[i];
+        }
+        return (sum / (double) input.length);
+    }
+
+    private static double[] subSignal(double[] signal, int i, int n) {
+        double[] m = new double[n];
+        int l = 0;
+
+        // At the start of the signal array use the first values multiple times
+        if (i < (n / 2)) {
+
+            while (l < (n / 2)) {
+                m[l] = signal[i];
+                l++;
+            }
+
+            for (int k = i; k < i + (n / 2); k++) {
+                m[l] = signal[k];
+                l++;
+            }
+            // At the end use the final signal multiple times.
+        } else if ((i + n / 2) >= signal.length) {
+
+            for (int k = i - (n / 2); k <= i; k++) {
+                m[l] = signal[k];
+                l++;
+            }
+
+            while (l < (n / 2)) {
+                m[l] = signal[i];
+                l++;
+            }
+
+        } else {
+            for (int k = i - (n / 2); k < i + (n / 2); k++) {
+                m[l] = signal[k];
+                l++;
+            }
+        }
+        return m;
     }
 
     public static double[] reduceNoiseHardT(double signal[], double threshold) {
