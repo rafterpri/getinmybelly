@@ -513,7 +513,9 @@ public class ECGFrame extends javax.swing.JFrame {
             return newSig;
 
         } else { //Fourier here!
-            return new double[0];
+            double[] newSig =  Arrays.copyOf(samples, samples.length);
+            DFT.doFFT(newSig);
+            return newSig; 
         }
     }
 
