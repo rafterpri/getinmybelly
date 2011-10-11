@@ -180,7 +180,7 @@ public class ECGFrame extends javax.swing.JFrame {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Operations"));
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Wavelet Transform"));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Transforms"));
 
         transformButtonGroup.add(haarRadioButton);
         haarRadioButton.setSelected(true);
@@ -196,7 +196,7 @@ public class ECGFrame extends javax.swing.JFrame {
 
         dwtWeightTxt.setText("2");
 
-        jButton2.setText("Wavelet Transform");
+        jButton2.setText("Transform");
         jButton2.setEnabled(false);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -363,7 +363,7 @@ public class ECGFrame extends javax.swing.JFrame {
                 .addGap(5, 5, 5)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(225, Short.MAX_VALUE))
@@ -430,7 +430,11 @@ public class ECGFrame extends javax.swing.JFrame {
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        if(fourierRadioButton.isSelected()) {
+            drawGraph("Fourier Transform", true);
+        } else {
         drawGraph("Wavelet Transform", true);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -513,12 +517,21 @@ public class ECGFrame extends javax.swing.JFrame {
             return newSig;
 
         } else { //Fourier here!
-            double[] newSig =  Arrays.copyOf(samples, samples.length);
-            DFT.doFFT(newSig);
+//            double[] newSig =  Arrays.copyOf(samples, samples.length);
+//            newSig = DFT.DiscreteFourier(newSig);
+            Complex[] cSig = new Complex[samples.length];
+            for (int i = 0; i < samples.length; i++) {
+                cSig[i] = new Complex(samples[i],0);
+            }
+            DFT.DiscreteFourier(cSig);
+            double[] newSig = new double[samples.length];
+            for (int i = 0; i < samples.length; i++) {
+                newSig[i] = cSig[i].mod();
+            }
             return newSig; 
         }
     }
-
+    
     private double[] doInvTransform(double[] signal) {
         if (haarRadioButton.isSelected()) {
 

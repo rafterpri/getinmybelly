@@ -268,7 +268,7 @@
                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   <Component id="jPanel6" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jPanel3" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
                   <EmptySpace pref="225" max="32767" attributes="0"/>
@@ -281,7 +281,7 @@
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                <TitledBorder title="Wavelet Transform"/>
+                <TitledBorder title="Transforms"/>
               </Border>
             </Property>
           </Properties>
@@ -374,7 +374,7 @@
             </Component>
             <Component class="javax.swing.JButton" name="jButton2">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Wavelet Transform"/>
+                <Property name="text" type="java.lang.String" value="Transform"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
