@@ -17,6 +17,7 @@ public class ECGFrame extends javax.swing.JFrame {
 
     private String selectedFile;
     private double[] samples;
+    private double[] transformed;
     private String yAxis;
     private String signalName;
     private boolean graph1Drawn = false;
@@ -60,10 +61,9 @@ public class ECGFrame extends javax.swing.JFrame {
         haarRadioButton = new javax.swing.JRadioButton();
         d4RadioButton = new javax.swing.JRadioButton();
         fourierRadioButton = new javax.swing.JRadioButton();
-        jLabel3 = new javax.swing.JLabel();
-        dwtWeightTxt = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         medianFilterButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
@@ -192,10 +192,6 @@ public class ECGFrame extends javax.swing.JFrame {
         transformButtonGroup.add(fourierRadioButton);
         fourierRadioButton.setText("Fourier");
 
-        jLabel3.setText("DWT Weight:");
-
-        dwtWeightTxt.setText("2");
-
         jButton2.setText("Transform");
         jButton2.setEnabled(false);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -204,11 +200,18 @@ public class ECGFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("Noise reduction");
+        jButton3.setText("Filter");
         jButton3.setEnabled(false);
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Inverse Transform");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
             }
         });
 
@@ -217,22 +220,17 @@ public class ECGFrame extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(haarRadioButton)
-                            .addComponent(d4RadioButton)
-                            .addComponent(fourierRadioButton)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dwtWeightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(haarRadioButton)
+                    .addComponent(d4RadioButton)
+                    .addComponent(fourierRadioButton)
+                    .addComponent(jButton4)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jButton2)
-                        .addGap(6, 6, 6)
-                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -242,14 +240,12 @@ public class ECGFrame extends javax.swing.JFrame {
                 .addComponent(d4RadioButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fourierRadioButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addComponent(jButton4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(dwtWeightTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)))
+                    .addComponent(jButton3)
+                    .addComponent(jButton2)))
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Filters"));
@@ -285,7 +281,7 @@ public class ECGFrame extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(filterTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(69, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -330,7 +326,7 @@ public class ECGFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(graph2Radio))
                     .addComponent(replaceRadio))
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -349,13 +345,11 @@ public class ECGFrame extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -366,7 +360,7 @@ public class ECGFrame extends javax.swing.JFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(225, Short.MAX_VALUE))
+                .addGap(222, 222, 222))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -379,15 +373,15 @@ public class ECGFrame extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 664, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -477,10 +471,16 @@ public class ECGFrame extends javax.swing.JFrame {
         jPanel2.repaint();
     }//GEN-LAST:event_clear2ButtonActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        samples = doInvTransform(transformed);
+        drawGraph("Inverse transformed", false);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
     private void drawGraph(String name, boolean transform) {
         double[] signal;
         if (transform) {
-            signal = doTransform();
+            doTransform();
+            signal = transformed;
         } else {
             signal = samples;
         }
@@ -504,17 +504,16 @@ public class ECGFrame extends javax.swing.JFrame {
 
     private double[] doTransform() {
         if (haarRadioButton.isSelected()) {
-
-            int wgt = Integer.parseInt(dwtWeightTxt.getText());
-            double weight = Math.sqrt(wgt);
+            double weight = Math.sqrt(2);
             Matrix result = DWT.waveletTransform(weight, samples);
-            return result.transpose().getArray()[0];
+            transformed = result.transpose().getArray()[0];
+            return transformed;
 
         } else if (d4RadioButton.isSelected()) {
 
-            double[] newSig = Arrays.copyOf(samples, samples.length);
-            DWT.d4Transform(newSig);
-            return newSig;
+            transformed = Arrays.copyOf(samples, samples.length);
+            DWT.d4CompleteTransform(transformed);
+            return transformed;
 
         } else { //Fourier here!
 //            double[] newSig =  Arrays.copyOf(samples, samples.length);
@@ -524,25 +523,24 @@ public class ECGFrame extends javax.swing.JFrame {
                 cSig[i] = new Complex(samples[i],0);
             }
             DFT.DiscreteFourier(cSig);
-            double[] newSig = new double[samples.length];
+            transformed = new double[samples.length];
             for (int i = 0; i < samples.length; i++) {
-                newSig[i] = cSig[i].mod();
+                transformed[i] = cSig[i].mod();
             }
-            return newSig; 
+            return transformed; 
         }
     }
     
     private double[] doInvTransform(double[] signal) {
         if (haarRadioButton.isSelected()) {
 
-            int wgt = Integer.parseInt(dwtWeightTxt.getText());
-            double weight = Math.sqrt(wgt);
+            double weight = Math.sqrt(2);
             return DWT.inverseHaarWaveletTransform(signal, weight);
 
         } else if (d4RadioButton.isSelected()) {
 
             double[] newSig = Arrays.copyOf(signal, signal.length);
-            DWT.invD4Transform(newSig);
+            DWT.d4CompleteInvTransform(newSig);
             return newSig;
 
         } else { //Fourier here!
@@ -616,7 +614,6 @@ public class ECGFrame extends javax.swing.JFrame {
     private javax.swing.JButton clear2Button;
     private javax.swing.JRadioButton d4RadioButton;
     private javax.swing.JButton drawButton;
-    private javax.swing.JTextField dwtWeightTxt;
     private javax.swing.JTextField fileTextField;
     private javax.swing.JTextField filterTxt;
     private javax.swing.JRadioButton fourierRadioButton;
@@ -630,9 +627,9 @@ public class ECGFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
