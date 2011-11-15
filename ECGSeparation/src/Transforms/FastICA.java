@@ -19,17 +19,42 @@ public class FastICA {
     private static double[][] dewhiteningMatrix;
     private static double[][] whitenedVectors;
 
-    public static void fastICA(double[][] input, int components, int maxIterations) {
+    public static void fastICA(double[][] input, int components, int maxIterations, double epsilon) {
         whitening(input);
-        double[] w = Vector.random(input[0].length);
+        int n = whitenedVectors[0].length;
+        double[] w = Vector.random(n); // This may have to be a matrix???
         w = Vector.normalize(w);
+
         for (int k = 1; k < maxIterations; k++) {
-            double[][] prevW = Arrays.copyOf(input, input.length);
-            
-            double[][] one = Matrix.mult(Vector.transpose(prevW), whitenedVectors);
-            double[][] two = Matrix.mult(Matrix.square(one), one);
-            double[][] three = Matrix.mult(whitenedVectors, two);
+
+            double[] prevW = Arrays.copyOf(w, w.length);
+
+            double[] firstPart = new double[n];
+            for (int j = 0; j < whitenedVectors.length; j++) {
+
+                //First part of the equation
+                double one = Vector.dot(prevW, whitenedVectors[j]);
+                one = Math.pow(one, 3);
+                double[] two = Vector.scale(one, whitenedVectors[j]);
+                firstPart = Vector.add(firstPart, two);
+                //
+            }
+
+            firstPart = Vector.scale((1.0 / (double) n), firstPart);
+
+            //Second part of the equation
+            double[] secondPart = Vector.scale(3, prevW);
+            //
+
+            w = Vector.normalize(w);
+
+            if (Vector.dot(w, prevW) >= (1 - epsilon)) {
+                break;
+            }
         }
+
+        double[][] mixingMatrix = Matrix.mult(dewhiteningMatrix, Matrix.transpose(weightMatrix));
+        double[][] separatingMatrix = Matrix.mult(weightMatrix, whiteningMatrix);
     }
 
     private static void whitening(double[][] input) {
@@ -56,7 +81,6 @@ public class FastICA {
         whitenedVectors =
                 Matrix.mult(whiteningMatrix, vectorsZeroMean);
     }
-    
 
     /**
      * Calculates the mean vector from a set of vectors.
