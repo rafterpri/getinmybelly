@@ -19,23 +19,26 @@ public class FastICA {
     private static double[][] dewhiteningMatrix;
     private static double[][] whitenedVectors;
 
-    public static void fastICA(double[][] input, int components, int maxIterations, double epsilon) {
+    public static double[] fastICA(double[][] input, int maxIterations, double epsilon) {
         whitening(input);
-        int n = whitenedVectors[0].length;
-        double[] w = Vector.random(n); // This may have to be a matrix???
+        
+        int m = Matrix.getNumOfRows(whitenedVectors);
+        int n = Matrix.getNumOfColumns(whitenedVectors);
+        
+        double[] w = Vector.random(m);
         w = Vector.normalize(w);
 
         for (int k = 1; k < maxIterations; k++) {
 
             double[] prevW = Arrays.copyOf(w, w.length);
 
-            double[] firstPart = new double[n];
-            for (int j = 0; j < whitenedVectors.length; j++) {
+            double[] firstPart = new double[m];
+            for (int j = 0; j < n; j++) {
 
                 //First part of the equation
-                double one = Vector.dot(prevW, whitenedVectors[j]);
+                double one = Vector.dot(prevW, Matrix.getVecOfCol(whitenedVectors, j));
                 one = Math.pow(one, 3);
-                double[] two = Vector.scale(one, whitenedVectors[j]);
+                double[] two = Vector.scale(one, Matrix.getVecOfCol(whitenedVectors, j));
                 firstPart = Vector.add(firstPart, two);
                 //
             }
@@ -52,9 +55,13 @@ public class FastICA {
                 break;
             }
         }
-
-        double[][] mixingMatrix = Matrix.mult(dewhiteningMatrix, Matrix.transpose(weightMatrix));
-        double[][] separatingMatrix = Matrix.mult(weightMatrix, whiteningMatrix);
+        
+        double[][] wTransposed = new double[m][1];
+        
+        for (int i = 0; i < m; i++) {
+            wTransposed[i][0] = w[i];
+        }
+        return Matrix.mult(wTransposed, whitenedVectors)[0];
     }
 
     private static void whitening(double[][] input) {
