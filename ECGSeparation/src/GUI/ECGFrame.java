@@ -503,7 +503,7 @@ public class ECGFrame extends javax.swing.JFrame {
         }
         Reader.closeEDFFile();
         
-        samples = FastICA.fastICA(signals, 20, 0.1);
+        samples = FastICA.fastICA(signals, 20, 0.001);
         drawGraph("ICA exctracted signal", false);
     }//GEN-LAST:event_jButton5ActionPerformed
 

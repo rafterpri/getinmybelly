@@ -46,12 +46,15 @@ public class FastICA {
             firstPart = Vector.scale((1.0 / (double) n), firstPart);
 
             //Second part of the equation
-            double[] secondPart = Vector.scale(3, prevW);
+            double[] secondPart = Vector.scale(-3, prevW);
             //
-
+            w = Vector.add(firstPart, secondPart);
             w = Vector.normalize(w);
 
-            if (Vector.dot(w, prevW) >= (1 - epsilon)) {
+            double dotTest = Math.abs(Vector.dot(w, prevW));
+            System.out.println("Dot test: " + dotTest);
+            if (dotTest >= (1 - epsilon)) {
+                System.out.println("Converged after " + k + " iterations.");
                 break;
             }
         }
