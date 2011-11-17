@@ -18,17 +18,94 @@ public class FastICA {
     private static double[][] whiteningMatrix;
     private static double[][] dewhiteningMatrix;
     private static double[][] whitenedVectors;
+    private static double[][] weightMatrix;
+    private static double[][] B;
 
-    public static double[] fastICA(double[][] input, int maxIterations, double epsilon) {
+    /**
+     * Finds a certain number of indepentent components of the inout signal using fastica
+     * @param input the input signals
+     * @param maxIterations maximum number of iterations
+     * @param epsilon level of accuracy
+     * @param noComponents the number of components this method should return
+     * @return the independent components of the signal
+     */
+    public static double[][] fastICA(double[][] input, int maxIterations, double epsilon, int noComponents) {
         whitening(input);
-        
+
         int m = Matrix.getNumOfRows(whitenedVectors);
         int n = Matrix.getNumOfColumns(whitenedVectors);
-        
-        double[] w = Vector.random(m);
+        for (int c = 0; c < noComponents; c++) {
+            double[] w = Vector.random(m);                              //Step 1
+            if (B != null) {
+                System.out.println("New init...");
+                w = Vector.sub(w, Matrix.mult(Matrix.mult(B, Matrix.transpose(B)), w)); // new stuff for step 1
+            }
+            w = Vector.normalize(w);
+
+            for (int k = 1; k < maxIterations; k++) {               // Steps 2 - 4
+
+                double[] prevW = Arrays.copyOf(w, w.length);
+
+                double[] firstPart = new double[m];
+                for (int j = 0; j < n; j++) {
+
+                    //First part of the equation
+                    double one = Vector.dot(prevW, Matrix.getVecOfCol(whitenedVectors, j));
+                    one = Math.pow(one, 3);
+                    double[] two = Vector.scale(one, Matrix.getVecOfCol(whitenedVectors, j));
+                    firstPart = Vector.add(firstPart, two);
+                    //
+                }
+
+                firstPart = Vector.scale((1.0 / (double) n), firstPart);
+
+                //Second part of the equation
+                double[] secondPart = Vector.scale(-3, prevW);
+                //
+                w = Vector.add(firstPart, secondPart);              // End of step 2
+                if (B != null) {
+                    System.out.println("New Step 3");
+                    w = Vector.sub(w, Matrix.mult(Matrix.mult(B, Matrix.transpose(B)), w)); //New stuff for step 3 
+                }
+                w = Vector.normalize(w);                            // Step 3
+
+                double dotTest = Math.abs(Vector.dot(w, prevW));
+                System.out.println("Dot test: " + dotTest);
+                if (dotTest >= (1 - epsilon)) {                     // Step 4
+                    System.out.println("Converged after " + k + " iterations.");
+                    break;
+                }
+            }
+
+            double[][] wTransposed = new double[m][noComponents];
+
+            for (int i = 0; i < m; i++) {
+                wTransposed[i][c] = w[i];
+            }
+            B = new double[m][c + 1];
+            B = wTransposed;
+        }
+        return Matrix.mult(B, whitenedVectors);
+    }
+
+    /**
+     * Finds the major component of the input signal using fastica
+     * 
+     * @param input the input signals
+     * @param maxIterations maximum number of iterations
+     * @param epsilon level of accuracy
+     * @return the major component
+     */
+    public static double[] fastICA(double[][] input, int maxIterations, double epsilon) {
+        whitening(input);
+
+        int m = Matrix.getNumOfRows(whitenedVectors);
+        int n = Matrix.getNumOfColumns(whitenedVectors);
+
+        double[] w = Vector.random(m);                              //Step 1
         w = Vector.normalize(w);
 
-        for (int k = 1; k < maxIterations; k++) {
+        for (int k = 1; k < maxIterations; k++) {               // Steps 2 - 4
 
             double[] prevW = Arrays.copyOf(w, w.length);
 
@@ -48,22 +125,24 @@ public class FastICA {
             //Second part of the equation
             double[] secondPart = Vector.scale(-3, prevW);
             //
-            w = Vector.add(firstPart, secondPart);
-            w = Vector.normalize(w);
+            w = Vector.add(firstPart, secondPart);              // End of step 2
+            w = Vector.normalize(w);                            // Step 3
 
             double dotTest = Math.abs(Vector.dot(w, prevW));
             System.out.println("Dot test: " + dotTest);
-            if (dotTest >= (1 - epsilon)) {
+            if (dotTest >= (1 - epsilon)) {                     // Step 4
                 System.out.println("Converged after " + k + " iterations.");
                 break;
             }
         }
-        
+
         double[][] wTransposed = new double[m][1];
-        
+
         for (int i = 0; i < m; i++) {
             wTransposed[i][0] = w[i];
         }
+
+
         return Matrix.mult(wTransposed, whitenedVectors)[0];
     }
 

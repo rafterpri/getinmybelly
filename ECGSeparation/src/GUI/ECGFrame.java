@@ -503,10 +503,18 @@ public class ECGFrame extends javax.swing.JFrame {
         }
         Reader.closeEDFFile();
         
-        samples = FastICA.fastICA(signals, 20, 0.001);
-        drawGraph("ICA exctracted signal", false);
+//        samples = FastICA.fastICA(signals, 20, 0.001);
+//        drawGraph("ICA exctracted signal", false);
+        drawComponents("ICA extracted signal", FastICA.fastICA(signals, 20, 0.001,2));
     }//GEN-LAST:event_jButton5ActionPerformed
-
+    
+    private void drawComponents(String name, double[][] components) {
+        graphPanel1.drawGraph(components[0], yAxis, name);
+        graph1Drawn = true;
+        graphPanel2.drawGraph(components[1], yAxis, name);
+        graph2Drawn = true;
+    }
+    
     private void drawGraph(String name, boolean transform) {
         double[] signal;
         if (transform) {
@@ -547,18 +555,19 @@ public class ECGFrame extends javax.swing.JFrame {
             return transformed;
 
         } else { //Fourier here!
-//            double[] newSig =  Arrays.copyOf(samples, samples.length);
-//            newSig = DFT.DiscreteFourier(newSig);
-            Complex[] cSig = new Complex[samples.length];
-            for (int i = 0; i < samples.length; i++) {
-                cSig[i] = new Complex(samples[i],0);
-            }
-            DFT.DiscreteFourier(cSig);
-            transformed = new double[samples.length];
-            for (int i = 0; i < samples.length; i++) {
-                transformed[i] = cSig[i].mod();
-            }
-            return transformed; 
+            double[] newSig =  Arrays.copyOf(samples, samples.length);
+            transformed = DFT.DiscreteFourier(newSig);
+            return transformed;
+//            Complex[] cSig = new Complex[samples.length];
+//            for (int i = 0; i < samples.length; i++) {
+//                cSig[i] = new Complex(samples[i],0);
+//            }
+//            DFT.DiscreteFourier(cSig);
+//            transformed = new double[samples.length];
+//            for (int i = 0; i < samples.length; i++) {
+//                transformed[i] = cSig[i].mod();
+//            }
+//            return transformed; 
         }
     }
     
