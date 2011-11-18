@@ -123,14 +123,11 @@ public class NoiseReduction {
 
         for (int i = 0; i < len; i++) {
             if (Math.abs(sig2[i]) < threshold) {
-                System.out.println("zero!");
                 sig2[i] = 0;
             } else {
-                if (sig2[i] > 0) {
-                    System.out.println("minus t");
+                if (sig2[i] > 0) {                    
                     sig2[i] -= threshold;
                 } else {
-                    System.out.println("plus t");
                     sig2[i] += threshold;
                 }
             }
@@ -147,7 +144,7 @@ public class NoiseReduction {
         double threshold = delta * Math.sqrt(Math.log(signal.length));
 
         System.out.println("Dynamic Threshold = " + threshold);
-        return reduceNoiseHardT(signal, threshold);
+        return reduceNoiseSoftT(signal, threshold);
     }
 
     public static double[] reduceNoiseTomsWay(double signal[]) {

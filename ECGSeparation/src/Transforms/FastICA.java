@@ -20,6 +20,8 @@ public class FastICA {
     private static double[][] whitenedVectors;
     private static double[][] weightMatrix;
     private static double[][] B;
+    
+    private static int iterationLimit = 5;
 
     /**
      * Finds a certain number of indepentent components of the inout signal using fastica
@@ -34,14 +36,23 @@ public class FastICA {
 
         int m = Matrix.getNumOfRows(whitenedVectors);
         int n = Matrix.getNumOfColumns(whitenedVectors);
+        if (m > noComponents) {
+            noComponents = m;
+        }
+        B = Matrix.random(noComponents, m);
         for (int c = 0; c < noComponents; c++) {
-            double[] w = Vector.random(m);                              //Step 1
-            if (B != null) {
+            //Step 1
+            double[] w = Vector.random(m);
+            
+            if (c > 0) {
                 System.out.println("New init...");
-                w = Vector.sub(w, Matrix.mult(Matrix.mult(B, Matrix.transpose(B)), w)); // new stuff for step 1
+                double[][] temp = Matrix.mult(B, Matrix.transpose(B));
+                double[] temp2 = Matrix.mult(temp, w);
+                w = Vector.sub(w, temp2); // new stuff for step 1
             }
+            
             w = Vector.normalize(w);
-
+            
             for (int k = 1; k < maxIterations; k++) {               // Steps 2 - 4
 
                 double[] prevW = Arrays.copyOf(w, w.length);
@@ -60,30 +71,35 @@ public class FastICA {
                 firstPart = Vector.scale((1.0 / (double) n), firstPart);
 
                 //Second part of the equation
-                double[] secondPart = Vector.scale(-3, prevW);
+                double[] secondPart = Vector.scale(-3, prevW);                
+                w = Vector.add(firstPart, secondPart);        
                 //
-                w = Vector.add(firstPart, secondPart);              // End of step 2
-                if (B != null) {
+                
+                // End of step 2
+                
+                
+                // Step 3
+                if (c > 0 && k < iterationLimit) { // After a certain number of iterations dont do the extra setp anymore
                     System.out.println("New Step 3");
                     w = Vector.sub(w, Matrix.mult(Matrix.mult(B, Matrix.transpose(B)), w)); //New stuff for step 3 
                 }
-                w = Vector.normalize(w);                            // Step 3
+                w = Vector.normalize(w);                            
 
+                // End of step 3
+                
+                // Step 4
+                
                 double dotTest = Math.abs(Vector.dot(w, prevW));
                 System.out.println("Dot test: " + dotTest);
                 if (dotTest >= (1 - epsilon)) {                     // Step 4
                     System.out.println("Converged after " + k + " iterations.");
                     break;
                 }
+                
+                // End of step 4
             }
 
-            double[][] wTransposed = new double[m][noComponents];
-
-            for (int i = 0; i < m; i++) {
-                wTransposed[i][c] = w[i];
-            }
-            B = new double[m][c + 1];
-            B = wTransposed;
+            B[c] = w;
         }
         return Matrix.mult(B, whitenedVectors);
     }

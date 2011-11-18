@@ -438,10 +438,10 @@ public class ECGFrame extends javax.swing.JFrame {
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if(fourierRadioButton.isSelected()) {
+        if (fourierRadioButton.isSelected()) {
             drawGraph("Fourier Transform", true);
         } else {
-        drawGraph("Wavelet Transform", true);
+            drawGraph("Wavelet Transform", true);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -492,14 +492,18 @@ public class ECGFrame extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         int sigCount = Integer.parseInt(sigCountText.getText());
-        
+
         Reader.openEDFFile(selectedFile);
         int sigs = Reader.noOfSignals();
-        
+
         // Build a matrix containing all the signals in the file.
         double[][] signals = new double[sigs][sigCount];
         for (int i = 0; i < sigs; i++) {
+
             signals[i] = Reader.readSamples(0, sigCount);
+            DWT.d4CompleteTransform(signals[i]);
+            signals[i] = NoiseReduction.reduceNoiseDynamicT(signals[i]);
+            DWT.d4CompleteInvTransform(signals[i]);
         }
         Reader.closeEDFFile();
         
@@ -523,7 +527,7 @@ public class ECGFrame extends javax.swing.JFrame {
         } else {
             signal = samples;
         }
-        
+
         if (graph1Radio.isSelected()) {
             if (addToRadio.isSelected() && graph1Drawn) {
                 graphPanel1.addGraph(signal, name);
@@ -570,7 +574,7 @@ public class ECGFrame extends javax.swing.JFrame {
 //            return transformed; 
         }
     }
-    
+
     private double[] doInvTransform(double[] signal) {
         if (haarRadioButton.isSelected()) {
 
