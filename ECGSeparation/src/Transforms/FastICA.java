@@ -21,7 +21,7 @@ public class FastICA {
     private static double[][] weightMatrix;
     private static double[][] B;
     
-    private static int iterationLimit = 5;
+    private static int iterationLimit = 7;
 
     /**
      * Finds a certain number of indepentent components of the inout signal using fastica
@@ -101,7 +101,7 @@ public class FastICA {
 
             B[c] = w;
         }
-        return Matrix.mult(B, whitenedVectors);
+        return Matrix.mult(Matrix.transpose(B), whitenedVectors); // TODO, I think B should be transposed.
     }
 
     /**
