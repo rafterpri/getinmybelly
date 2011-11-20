@@ -18,9 +18,7 @@ public class FastICA {
     private static double[][] whiteningMatrix;
     private static double[][] dewhiteningMatrix;
     private static double[][] whitenedVectors;
-    private static double[][] weightMatrix;
     private static double[][] B;
-    
     private static int iterationLimit = 7;
 
     /**
@@ -36,28 +34,36 @@ public class FastICA {
 
         int m = Matrix.getNumOfRows(whitenedVectors);
         int n = Matrix.getNumOfColumns(whitenedVectors);
+
         if (m > noComponents) {
             noComponents = m;
         }
+
         B = Matrix.random(noComponents, m);
-        for (int c = 0; c < noComponents; c++) {
-            //Step 1
-            double[] w = Vector.random(m);
-            
-            if (c > 0) {
-                System.out.println("New init...");
-                double[][] temp = Matrix.mult(B, Matrix.transpose(B));
-                double[] temp2 = Matrix.mult(temp, w);
-                w = Vector.sub(w, temp2); // new stuff for step 1
-            }
-            
-            w = Vector.normalize(w);
-            
-            for (int k = 1; k < maxIterations; k++) {               // Steps 2 - 4
+        B =
+                Matrix.mult(
+                powerSymmMatrix(Matrix.square(B), -0.5),
+                B);
+        
+        /* for (int i = 0; i < noComponents; i++) {
+            double[] vec = Matrix.getVecOfCol(B, i);
+            B[i] = Vector.normalize(vec);
+        }
 
-                double[] prevW = Arrays.copyOf(w, w.length);
+        for (int i = 0; i < noComponents; i++) {
+            double[] vec = Matrix.getVecOfCol(B, i);
+            B[i] = Vector.sub(vec, Matrix.mult(Matrix.mult(B, Matrix.transpose(B)), vec));
+            B[i] = Vector.normalize(B[i]);
+        }*/
 
+        for (int k = 1; k < maxIterations; k++) {               // Steps 2 - 4
+            double[][] oldB = Matrix.clone(B);
+
+            for (int c = 0; c < noComponents; c++) {
+                //Step 1
+                double[] prevW = Matrix.getVecOfRow(oldB, c);
                 double[] firstPart = new double[m];
+
                 for (int j = 0; j < n; j++) {
 
                     //First part of the equation
@@ -66,42 +72,48 @@ public class FastICA {
                     double[] two = Vector.scale(one, Matrix.getVecOfCol(whitenedVectors, j));
                     firstPart = Vector.add(firstPart, two);
                     //
+
                 }
 
                 firstPart = Vector.scale((1.0 / (double) n), firstPart);
 
                 //Second part of the equation
-                double[] secondPart = Vector.scale(-3, prevW);                
-                w = Vector.add(firstPart, secondPart);        
+                double[] secondPart = Vector.scale(-3, prevW);
+                double[] w = Vector.add(firstPart, secondPart);
                 //
-                
+
                 // End of step 2
-                
-                
+
+
                 // Step 3
-                if (c > 0 && k < iterationLimit) { // After a certain number of iterations dont do the extra setp anymore
-                    System.out.println("New Step 3");
-                    w = Vector.sub(w, Matrix.mult(Matrix.mult(B, Matrix.transpose(B)), w)); //New stuff for step 3 
-                }
-                w = Vector.normalize(w);                            
+                /* if (c > 0 && k < iterationLimit) { // After a certain number of iterations dont do the extra setp anymore
+                w = Vector.sub(w, Matrix.mult(Matrix.mult(B, Matrix.transpose(B)), w)); //New stuff for step 3 
+                } */
+                w = Vector.normalize(w);
 
                 // End of step 3
-                
-                // Step 4
-                
-                double dotTest = Math.abs(Vector.dot(w, prevW));
-                System.out.println("Dot test: " + dotTest);
-                if (dotTest >= (1 - epsilon)) {                     // Step 4
-                    System.out.println("Converged after " + k + " iterations.");
-                    break;
+
+                // write new vector to the matrix
+                for (int j = 0; j < m; ++j) {
+                    B[c][j] = w[j];
                 }
-                
-                // End of step 4
             }
 
-            B[c] = w;
+            // symmetric decorrelation by orthonormalisation
+            B =
+                    Matrix.mult(
+                    powerSymmMatrix(Matrix.square(B), -0.5),
+                    B);
+
+            // test if good approximation
+            double matrixDelta = deltaMatrices(B, oldB);
+            System.out.println("Matrix delta: " + matrixDelta);
+            if (matrixDelta < epsilon) {
+                System.out.println("Converged after " + k + " iterations.");
+                break;
+            }
         }
-        return Matrix.mult(Matrix.transpose(B), whitenedVectors); // TODO, I think B should be transposed.
+        return Matrix.mult(B, whitenedVectors); // TODO, I think B should be transposed.
     }
 
     /**
@@ -204,5 +216,49 @@ public class FastICA {
             mValues[i] /= n;
         }
         return (mValues);
+    }
+
+    /**
+     * Calculates a difference measure of two matrices
+     * relative to their size.
+     * @param mat1 the first matrix
+     * @param mat2 the second matrix
+     * @return the difference measure
+     */
+    private static double deltaMatrices(
+            double[][] mat1,
+            double[][] mat2) {
+        double[][] test = Matrix.sub(mat1, mat2);
+        double delta = 0.0;
+        int m = Matrix.getNumOfRows(mat1);
+        int n = Matrix.getNumOfColumns(mat1);
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                delta += Math.abs(test[i][j]);
+            }
+        }
+        return (delta / (m * n));
+    }
+
+    /**
+     * Calculates the power of a symmetric matrix.
+     * @param inMatrix the symmetric matrix
+     * @param power the power
+     * @return the resulting matrix
+     */
+    private static double[][] powerSymmMatrix(
+            double[][] inMatrix,
+            double power) {
+        EigenValueDecompositionSymm eigenDeco =
+                new EigenValueDecompositionSymm(inMatrix);
+        int m = Matrix.getNumOfRows(inMatrix);
+        double[][] eigenVectors = eigenDeco.getEigenVectors();
+        double[] eigenValues = eigenDeco.getEigenValues();
+        for (int i = 0; i < m; ++i) {
+            eigenValues[i] = Math.pow(eigenValues[i], power);
+        }
+        return (Matrix.mult(
+                Matrix.mult(eigenVectors, Matrix.diag(eigenValues)),
+                Matrix.transpose(eigenVectors)));
     }
 }
