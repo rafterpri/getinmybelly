@@ -40,20 +40,19 @@ public class FastICA {
         }
 
         B = Matrix.random(noComponents, m);
-        B =
-                Matrix.mult(
+        B = Matrix.mult(
                 powerSymmMatrix(Matrix.square(B), -0.5),
                 B);
-        
-        /* for (int i = 0; i < noComponents; i++) {
-            double[] vec = Matrix.getVecOfCol(B, i);
-            B[i] = Vector.normalize(vec);
-        }
 
+        /* for (int i = 0; i < noComponents; i++) {
+        double[] vec = Matrix.getVecOfCol(B, i);
+        B[i] = Vector.normalize(vec);
+        }
+        
         for (int i = 0; i < noComponents; i++) {
-            double[] vec = Matrix.getVecOfCol(B, i);
-            B[i] = Vector.sub(vec, Matrix.mult(Matrix.mult(B, Matrix.transpose(B)), vec));
-            B[i] = Vector.normalize(B[i]);
+        double[] vec = Matrix.getVecOfCol(B, i);
+        B[i] = Vector.sub(vec, Matrix.mult(Matrix.mult(B, Matrix.transpose(B)), vec));
+        B[i] = Vector.normalize(B[i]);
         }*/
 
         for (int k = 1; k < maxIterations; k++) {               // Steps 2 - 4
@@ -100,12 +99,10 @@ public class FastICA {
             }
 
             // symmetric decorrelation by orthonormalisation
-            B =
-                    Matrix.mult(
+            B = Matrix.mult(
                     powerSymmMatrix(Matrix.square(B), -0.5),
                     B);
 
-            // test if good approximation
             double matrixDelta = deltaMatrices(B, oldB);
             System.out.println("Matrix delta: " + matrixDelta);
             if (matrixDelta < epsilon) {
@@ -113,7 +110,8 @@ public class FastICA {
                 break;
             }
         }
-        return Matrix.mult(B, whitenedVectors); // TODO, I think B should be transposed.
+        double[][] sepMatrix = Matrix.mult(B, whiteningMatrix); // TODO, I think B should be transposed.
+        return Matrix.mult(sepMatrix, input);
     }
 
     /**
