@@ -9,6 +9,13 @@ package Transforms.math;
  */
 public class Matrix {
 
+    public static double[][] normalize(double[][] m) {
+        double[][] newM = new double[m.length][m[0].length];
+        for(int i = 0 ; i < m.length ; i++) {
+            newM[i] = Vector.normalize(m[i]);
+        }
+        return newM;
+    }
     /**
      * Square roots every element of the vector.
      * @param inVector the vector
