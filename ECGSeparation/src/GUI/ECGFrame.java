@@ -3,9 +3,11 @@ package GUI;
 import Jama.Matrix;
 import Transforms.*;
 import Signals.Reader;
+import java.awt.Container;
 import java.io.File;
 import java.util.Arrays;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
@@ -74,7 +76,10 @@ public class ECGFrame extends javax.swing.JFrame {
         replaceRadio = new javax.swing.JRadioButton();
         graph1Radio = new javax.swing.JRadioButton();
         graph2Radio = new javax.swing.JRadioButton();
-        jButton5 = new javax.swing.JButton();
+        jPanel7 = new javax.swing.JPanel();
+        fastICAButton = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        signalList = new javax.swing.JList();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -147,7 +152,7 @@ public class ECGFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(clear2Button)
                     .addComponent(clear1Button))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -241,7 +246,7 @@ public class ECGFrame extends javax.swing.JFrame {
                 .addComponent(d4RadioButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fourierRadioButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addComponent(jButton4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -282,7 +287,7 @@ public class ECGFrame extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(filterTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -327,7 +332,7 @@ public class ECGFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(graph2Radio))
                     .addComponent(replaceRadio))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -341,40 +346,65 @@ public class ECGFrame extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jButton5.setText("FastICA");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Blind source separation"));
+
+        fastICAButton.setText("FastICA");
+        fastICAButton.setEnabled(false);
+        fastICAButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                fastICAButtonActionPerformed(evt);
             }
         });
+
+        jScrollPane1.setViewportView(signalList);
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(fastICAButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addContainerGap(17, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(fastICAButton)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(62, 62, 62)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(88, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(5, 5, 5)
+                .addContainerGap()
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton5)
-                .addGap(193, 193, 193))
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -385,7 +415,7 @@ public class ECGFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 664, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -490,35 +520,47 @@ public class ECGFrame extends javax.swing.JFrame {
         drawGraph("Inverse transformed", false);
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void fastICAButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fastICAButtonActionPerformed
         int sigCount = Integer.parseInt(sigCountText.getText());
 
         Reader.openEDFFile(selectedFile);
-        int sigs = Reader.noOfSignals();
+
+        Object[] selItems = signalList.getSelectedValues();
+        int sigs = selItems.length;
 
         // Build a matrix containing all the signals in the file.
         double[][] signals = new double[sigs][sigCount];
         for (int i = 0; i < sigs; i++) {
-
-            signals[i] = Reader.readSamples(0, sigCount);
-            DWT.d4CompleteTransform(signals[i]);
+            int signalId = ((ComboItem) selItems[i]).getId();
+            signals[i] = Reader.readSamples(signalId, sigCount);
+            
+            //graphPanel1.drawGraph(signals[i], yAxis, "Before");
+            // Do some noise-reduction
+            /* DWT.d4CompleteTransform(signals[i]);
             signals[i] = NoiseReduction.reduceNoiseDynamicT(signals[i]);
-            DWT.d4CompleteInvTransform(signals[i]);
+            DWT.d4CompleteInvTransform(signals[i]); */
+            //graphPanel2.drawGraph(signals[i], yAxis, "After");
         }
         Reader.closeEDFFile();
-        
-//        samples = FastICA.fastICA(signals, 20, 0.001);
-//        drawGraph("ICA exctracted signal", false);
-        drawComponents("ICA extracted signal", FastICA.fastICA(signals, 20, 0.001,2));
-    }//GEN-LAST:event_jButton5ActionPerformed
-    
+        drawComponents("ICA extracted signal", FastICA.fastICA(signals, 50, 0.001, sigs));
+    }//GEN-LAST:event_fastICAButtonActionPerformed
+
     private void drawComponents(String name, double[][] components) {
-        graphPanel1.drawGraph(components[0], yAxis, name);
-        graph1Drawn = true;
-        graphPanel2.drawGraph(components[1], yAxis, name);
-        graph2Drawn = true;
+
+        for (int i = 0; i < components.length; i++) {
+            JFrame graphForm = new JFrame();
+            graphForm.setSize(500, 300);
+            graphForm.setLocation(100, i * 100);
+            Container cPane = graphForm.getContentPane();
+            GraphPanel gPanel = new GraphPanel();
+            gPanel.setSize(500, 300);
+            cPane.add(gPanel);
+            gPanel.drawGraph(components[i], yAxis, name);
+            graphForm.setVisible(true);
+            graphForm.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        }
     }
-    
+
     private void drawGraph(String name, boolean transform) {
         double[] signal;
         if (transform) {
@@ -559,7 +601,7 @@ public class ECGFrame extends javax.swing.JFrame {
             return transformed;
 
         } else { //Fourier here!
-            double[] newSig =  Arrays.copyOf(samples, samples.length);
+            double[] newSig = Arrays.copyOf(samples, samples.length);
             transformed = DFT.DiscreteFourier(newSig);
             return transformed;
 //            Complex[] cSig = new Complex[samples.length];
@@ -594,15 +636,20 @@ public class ECGFrame extends javax.swing.JFrame {
 
     private void fillComboBox() {
         int signals = Reader.noOfSignals();
+        ComboItem items[] = new ComboItem[signals];
         if (signals > 0) {
 
             for (int i = 0; i < signals; i++) {
                 this.signalNamesList.addItem(new ComboItem(Reader.signalName(i), i));
+                items[i] = new ComboItem(Reader.signalName(i), i);
             }
-
+            signalList.setListData(items);
+            signalList.setSelectionInterval(0, signals - 1);
             drawButton.setEnabled(true);
+            fastICAButton.setEnabled(true);
         } else {
             drawButton.setEnabled(false);
+            fastICAButton.setEnabled(false);
         }
     }
 
@@ -658,6 +705,7 @@ public class ECGFrame extends javax.swing.JFrame {
     private javax.swing.JButton clear2Button;
     private javax.swing.JRadioButton d4RadioButton;
     private javax.swing.JButton drawButton;
+    private javax.swing.JButton fastICAButton;
     private javax.swing.JTextField fileTextField;
     private javax.swing.JTextField filterTxt;
     private javax.swing.JRadioButton fourierRadioButton;
@@ -672,7 +720,6 @@ public class ECGFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
@@ -682,11 +729,14 @@ public class ECGFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton meanFilterButton;
     private javax.swing.JButton medianFilterButton;
     private javax.swing.JRadioButton replaceRadio;
     private javax.swing.JButton resetButton;
     private javax.swing.JTextField sigCountText;
+    private javax.swing.JList signalList;
     private javax.swing.JComboBox signalNamesList;
     private javax.swing.ButtonGroup transformButtonGroup;
     // End of variables declaration//GEN-END:variables

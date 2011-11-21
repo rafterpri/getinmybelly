@@ -19,7 +19,7 @@ public class FastICA {
     private static double[][] dewhiteningMatrix;
     private static double[][] whitenedVectors;
     private static double[][] B;
-    private static int iterationLimit = 7;
+    private static int iterationLimit = 10;
 
     /**
      * Finds a certain number of indepentent components of the inout signal using fastica
@@ -43,17 +43,6 @@ public class FastICA {
         B = Matrix.mult(
                 powerSymmMatrix(Matrix.square(B), -0.5),
                 B);
-
-        /* for (int i = 0; i < noComponents; i++) {
-        double[] vec = Matrix.getVecOfCol(B, i);
-        B[i] = Vector.normalize(vec);
-        }
-        
-        for (int i = 0; i < noComponents; i++) {
-        double[] vec = Matrix.getVecOfCol(B, i);
-        B[i] = Vector.sub(vec, Matrix.mult(Matrix.mult(B, Matrix.transpose(B)), vec));
-        B[i] = Vector.normalize(B[i]);
-        }*/
 
         for (int k = 1; k < maxIterations; k++) {               // Steps 2 - 4
             double[][] oldB = Matrix.clone(B);
@@ -88,7 +77,7 @@ public class FastICA {
                 /* if (c > 0 && k < iterationLimit) { // After a certain number of iterations dont do the extra setp anymore
                 w = Vector.sub(w, Matrix.mult(Matrix.mult(B, Matrix.transpose(B)), w)); //New stuff for step 3 
                 } */
-                w = Vector.normalize(w);
+                //w = Vector.normalize(w);
 
                 // End of step 3
 
