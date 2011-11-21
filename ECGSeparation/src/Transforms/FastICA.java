@@ -99,7 +99,7 @@ public class FastICA {
                 break;
             }
         }
-        double[][] sepMatrix = Matrix.mult(B, whiteningMatrix); // TODO, I think B should be transposed.
+        double[][] sepMatrix = Matrix.mult(B, whiteningMatrix);
         return Matrix.mult(sepMatrix, input);
     }
 
@@ -161,7 +161,7 @@ public class FastICA {
         return Matrix.mult(wTransposed, whitenedVectors)[0];
     }
 
-    private static void whitening(double[][] input) {
+    public static void whitening(double[][] input) {
         // Centering, substract the mean from the signal vectors
         meanValues = calcMeanValues(input);
         vectorsZeroMean = Vector.addVecToSet(input, Vector.scale(-1.0, meanValues));
