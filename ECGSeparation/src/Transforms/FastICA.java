@@ -3,6 +3,7 @@ package Transforms;
 import Transforms.math.*;
 import java.util.Arrays;
 
+
 /**
  * 
  * @author Tom Pepels
@@ -171,6 +172,20 @@ public class FastICA {
         EigenValueDecompositionSymm eigenDeco = new EigenValueDecompositionSymm(covarianceMatrix);
         E = eigenDeco.getEigenVectors();
         eigenValues = eigenDeco.getEigenValues();
+        
+        //Eigenvaluefilter
+        System.out.println("Eigenvalues: ");
+        for(int i = 0 ;i < eigenValues.length ; i++)
+            System.out.println((i+1)+": "+eigenValues[i]);
+        EigenValueFilter ev = new BelowEVFilter(0.01, false);
+        ev.passEigenValues(eigenValues, E);
+        eigenValues = ev.getEigenValues();
+        System.out.println("New Eigenvalues: ");
+        for(int i = 0 ;i < eigenValues.length ; i++)
+            System.out.println((i+1)+": "+eigenValues[i]);
+        E = ev.getEigenVectors();
+        // Continue with new eigenvalues and vectors
+        
         // calculate the resulting vectors
         resVectors = Matrix.mult(Matrix.transpose(E), vectorsZeroMean);
 
