@@ -719,7 +719,7 @@ public class ECGFrame extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         int window = Integer.parseInt(windowTxt.getText());
-        double[][] specto = Spectogram.create(50, samples, 0);
+        double[][] specto = Spectogram.create(window, samples, window / 2);
         JFrame graphForm = new JFrame();
         graphForm.setSize(500, 300);
         graphForm.setLocation(100, 100);
@@ -727,7 +727,8 @@ public class ECGFrame extends javax.swing.JFrame {
         SpectoPanel gPanel = new SpectoPanel();
         gPanel.setSize(300, 300);
         cPane.add(gPanel);
-        gPanel.drawSpecto(specto);
+        gPanel.drawSpecto(specto, window / 2, window);
+        //gPanel.drawSpecto(specto);
         graphForm.setVisible(true);
         graphForm.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_jButton4ActionPerformed

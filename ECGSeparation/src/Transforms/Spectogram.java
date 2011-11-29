@@ -7,14 +7,27 @@ package Transforms;
 public class Spectogram {
     public static double[][] create(int window, double[] signal, int overlap) {
         int partitions = signal.length / window;
-        double[][] specto = new double[partitions][signal.length / partitions];
+        double[][] specto = new double[partitions][window];
         
         for(int i = 0; i < partitions; i++) {
-            int offset = i * window;
-            double[] fSignals = new double[window];
-            System.arraycopy(signal, i * window, fSignals, 0, window);
+            int over = overlap;
+            if (i == 0) {
+                over = 0;
+            }
+
+            int start = (i * window) - over;
+            int length = window;
+            
+            if (start + length >= signal.length) {
+                length = signal.length - start - 1;
+            }
+            
+            System.out.println("Start at: " + start + " end at: " + (start+length));
+            double[] fSignals = new double[length];
+            
+            System.arraycopy(signal, start, fSignals, 0, length);
             fSignals = DFT.forward(fSignals);
-            System.arraycopy(fSignals, 0, specto[i], 0, window);
+            System.arraycopy(fSignals, 0, specto[i], 0, length);
         }
         
         return specto;
