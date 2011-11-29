@@ -6,17 +6,17 @@ package Transforms;
  */
 public class Spectogram {
     public static double[][] create(int window, double[] signal, int overlap) {
-        int partitions = signal.length -window;// window;
+        int partitions = signal.length /(window-overlap)-overlap;// window;
         double[][] specto = new double[partitions][window];
         
         for(int i = 0; i < partitions; i++) {
             int over = overlap;
-            if (i == 0) {
-                over = 0;
-            }
+//            if (i == 0) {
+//                over = 0;
+//            }
 
-//            int start = (i * window) - over;
-            int start = i;
+            int start = i * (window - over);
+
             int length = window;
             
             if (start + length >= signal.length) {

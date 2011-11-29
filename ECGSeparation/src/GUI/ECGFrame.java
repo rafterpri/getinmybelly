@@ -736,7 +736,7 @@ public class ECGFrame extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         int window = Integer.parseInt(windowTxt.getText());
         int overlap = Integer.parseInt(overlapTxt.getText());
-        double[][] specto = Spectogram.create(window, samples, window-1);
+        double[][] specto = Spectogram.create(window, samples, overlap);
         JFrame graphForm = new JFrame();
         graphForm.setSize(500, 300);
         graphForm.setLocation(100, 100);
