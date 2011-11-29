@@ -6,20 +6,16 @@ package Transforms;
  */
 public class Spectogram {
     public static double[][] create(int window, double[] signal, int overlap) {
-        int partitions = signal.length /(window-overlap)-overlap;// window;
+        int partitions = signal.length /((window-overlap));// window;
         double[][] specto = new double[partitions][window];
         
-        for(int i = 0; i < partitions; i++) {
+        for(int i = 0; i < partitions-1; i++) {
 
             int start = i * (window - overlap);
-
             int length = window;
             
-            if (start + length >= signal.length) {
-                length = signal.length - start - 1;
-            }
             
-            System.out.println("Start at: " + start + " end at: " + (start+length));
+            System.out.println(i + " Start at: " + start + " end at: " + (start+length));
             double[] fSignals = new double[length];
             
             System.arraycopy(signal, start, fSignals, 0, length);
