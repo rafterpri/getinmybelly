@@ -10,7 +10,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-import org.fastica.*;
 
 /**
  *
@@ -586,92 +585,7 @@ public class ECGFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_clear2ButtonActionPerformed
 
     private void fastICAButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fastICAButtonActionPerformed
-        // FICA FROM LIBRARY
-        int sigCount = Integer.parseInt(sigCountText.getText());
-
-        Reader.openEDFFile(selectedFile);
-
-        Object[] selItems = signalList.getSelectedValues();
-        int sigs = selItems.length;
-        int components = Integer.parseInt(componentsTxt.getText());
-
-        int runs = 1;
-        if (sigs < components) {
-            runs = components / sigs;
-        }
-        // Build a matrix containing all the signals in the file.
-        double[][] signals = new double[components][sigCount];
-
-        for (int k = 0; k < runs; k++) {
-            for (int i = (k * sigs); i < (sigs + (k * sigs)); i++) {
-                int signalId = ((ComboItem) selItems[i - (k * sigs)]).getId();
-                signals[i] = Reader.readSamples(signalId, sigCount);
-
-                // TEST
-                int n = Integer.parseInt(filterTxt.getText());
-                signals[i] = NoiseReduction.medianFilter(signals[i], n);
-                // END TEST
-
-                if (FourierDomain.isSelected()) {
-                    signals[i] = DFT.forward(signals[i]);
-                }
-
-                if (dwtPreFilter.isSelected()) {
-                    // Do some noise-reduction
-                    DWT.d4CompleteTransform(signals[i]);
-                    signals[i] = NoiseReduction.reduceNoiseDynamicT(signals[i]);
-                    DWT.d4CompleteInvTransform(signals[i]);
-                }
-            }
-        }
-        Reader.closeEDFFile();
-
-        CompositeEVFilter filter = new CompositeEVFilter();
-        filter.add(new BelowEVFilter(1.0e-8, false));
-        filter.add(new SortingEVFilter(true, true));
-        // build a ICA configuration
-        FastICAConfig config = new FastICAConfig(
-                components,
-                FastICAConfig.Approach.SYMMETRIC,
-                1.0, 1.0e-16, 1000, null);
-        // build the progress listener
-        ProgressListener listener =
-                new ProgressListener() {
-
-                    public void progressMade(
-                            ComputationState state,
-                            int component,
-                            int iteration,
-                            int maxComps) {
-                        System.out.print(
-                                "\r"
-                                + Integer.toString(component) + " - "
-                                + Integer.toString(iteration) + "     ");
-                    }
-                };
-        // perform the independent component analysis
-        System.out.println("Performing ICA");
-        try {
-            org.fastica.FastICA fica = new org.fastica.FastICA(signals, config, new TanhCFunction(3), filter, listener);
-            signals = fica.getICVectors();
-        } catch (FastICAException ex) {
-            System.out.println(ex);
-        }
-
-
-        for (int i = 0; i < signals.length; i++) {
-            if (FourierDomain.isSelected()) {
-                signals[i] = DFT.reverse(signals[i]);
-            }
-            if (dwtPostFilter.isSelected()) {
-                DWT.d4CompleteTransform(signals[i]);
-                signals[i] = NoiseReduction.reduceNoiseDynamicT(signals[i]);
-                DWT.d4CompleteInvTransform(signals[i]);
-            }
-        }
-        //
-
-        /*
+        /* FICA FROM LIBRARY
         int sigCount = Integer.parseInt(sigCountText.getText());
         
         Reader.openEDFFile(selectedFile);
@@ -685,7 +599,7 @@ public class ECGFrame extends javax.swing.JFrame {
         runs = components / sigs;
         }
         // Build a matrix containing all the signals in the file.
-        double[][] signals = new double[sigs * runs][sigCount];
+        double[][] signals = new double[components][sigCount];
         
         for (int k = 0; k < runs; k++) {
         for (int i = (k * sigs); i < (sigs + (k * sigs)); i++) {
@@ -711,7 +625,37 @@ public class ECGFrame extends javax.swing.JFrame {
         }
         Reader.closeEDFFile();
         
-        signals = FastICA.fastICA(signals, 50, 0.001, components);
+        CompositeEVFilter filter = new CompositeEVFilter();
+        filter.add(new BelowEVFilter(1.0e-8, false));
+        filter.add(new SortingEVFilter(true, true));
+        // build a ICA configuration
+        FastICAConfig config = new FastICAConfig(
+        components,
+        FastICAConfig.Approach.SYMMETRIC,
+        1.0, 1.0e-16, 1000, null);
+        // build the progress listener
+        ProgressListener listener =
+        new ProgressListener() {
+        
+        public void progressMade(
+        ComputationState state,
+        int component,
+        int iteration,
+        int maxComps) {
+        System.out.print(
+        "\r"
+        + Integer.toString(component) + " - "
+        + Integer.toString(iteration) + "     ");
+        }
+        };
+        // perform the independent component analysis
+        System.out.println("Performing ICA");
+        try {
+        org.fastica.FastICA fica = new org.fastica.FastICA(signals, config, new TanhCFunction(3), filter, listener);
+        signals = fica.getICVectors();
+        } catch (FastICAException ex) {
+        System.out.println(ex);
+        }
         
         
         for (int i = 0; i < signals.length; i++) {
@@ -724,8 +668,61 @@ public class ECGFrame extends javax.swing.JFrame {
         DWT.d4CompleteInvTransform(signals[i]);
         }
         }
-         *
          */
+
+
+        int sigCount = Integer.parseInt(sigCountText.getText());
+
+        Reader.openEDFFile(selectedFile);
+
+        Object[] selItems = signalList.getSelectedValues();
+        int sigs = selItems.length;
+        int components = Integer.parseInt(componentsTxt.getText());
+
+        int runs = 1;
+        if (sigs < components) {
+            runs = components / sigs;
+        }
+        // Build a matrix containing all the signals in the file.
+        double[][] signals = new double[sigs * runs][sigCount];
+
+        for (int k = 0; k < runs; k++) {
+            for (int i = (k * sigs); i < (sigs + (k * sigs)); i++) {
+                int signalId = ((ComboItem) selItems[i - (k * sigs)]).getId();
+                signals[i] = Reader.readSamples(signalId, sigCount);
+
+                // TEST
+                int n = Integer.parseInt(filterTxt.getText());
+                signals[i] = NoiseReduction.medianFilter(signals[i], n);
+                // END TEST
+
+                if (FourierDomain.isSelected()) {
+                    signals[i] = DFT.forward(signals[i]);
+                }
+
+                if (dwtPreFilter.isSelected()) {
+                    // Do some noise-reduction
+                    DWT.d4CompleteTransform(signals[i]);
+                    signals[i] = NoiseReduction.reduceNoiseDynamicT(signals[i]);
+                    DWT.d4CompleteInvTransform(signals[i]);
+                }
+            }
+        }
+        Reader.closeEDFFile();
+
+        signals = FastICA.fastICA(signals, 50, 0.001, components);
+
+
+        for (int i = 0; i < signals.length; i++) {
+            if (FourierDomain.isSelected()) {
+                signals[i] = DFT.reverse(signals[i]);
+            }
+            if (dwtPostFilter.isSelected()) {
+                DWT.d4CompleteTransform(signals[i]);
+                signals[i] = NoiseReduction.reduceNoiseDynamicT(signals[i]);
+                DWT.d4CompleteInvTransform(signals[i]);
+            }
+        }
         drawComponents("ICA extracted signal", signals);
     }//GEN-LAST:event_fastICAButtonActionPerformed
 

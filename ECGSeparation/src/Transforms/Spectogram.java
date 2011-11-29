@@ -10,12 +10,8 @@ public class Spectogram {
         double[][] specto = new double[partitions][window];
         
         for(int i = 0; i < partitions; i++) {
-            int over = overlap;
-//            if (i == 0) {
-//                over = 0;
-//            }
 
-            int start = i * (window - over);
+            int start = i * (window - overlap);
 
             int length = window;
             
