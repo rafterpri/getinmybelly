@@ -10,6 +10,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import org.fastica.*;
 
 /**
  *
@@ -84,6 +85,9 @@ public class ECGFrame extends javax.swing.JFrame {
         FourierDomain = new javax.swing.JCheckBox();
         dwtPreFilter = new javax.swing.JCheckBox();
         dwtPostFilter = new javax.swing.JCheckBox();
+        jButton4 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        windowTxt = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -236,7 +240,7 @@ public class ECGFrame extends javax.swing.JFrame {
                         .addComponent(fourierRadioButton))
                     .addComponent(d4RadioButton)
                     .addComponent(jButton3))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -286,7 +290,7 @@ public class ECGFrame extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(filterTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addContainerGap(90, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -382,7 +386,7 @@ public class ECGFrame extends javax.swing.JFrame {
                     .addComponent(FourierDomain)
                     .addComponent(dwtPreFilter)
                     .addComponent(dwtPostFilter)
-                    .addComponent(fastICAButton, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE))
+                    .addComponent(fastICAButton, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -404,6 +408,17 @@ public class ECGFrame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jButton4.setText("Spectogram");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Window:");
+
+        windowTxt.setText("500");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -417,8 +432,16 @@ public class ECGFrame extends javax.swing.JFrame {
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(18, Short.MAX_VALUE))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(windowTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(74, 74, 74))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -431,7 +454,12 @@ public class ECGFrame extends javax.swing.JFrame {
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(125, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton4)
+                    .addComponent(jLabel5)
+                    .addComponent(windowTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(96, 96, 96))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -542,6 +570,7 @@ public class ECGFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_clear2ButtonActionPerformed
 
     private void fastICAButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fastICAButtonActionPerformed
+        // FICA FROM LIBRARY
         int sigCount = Integer.parseInt(sigCountText.getText());
 
         Reader.openEDFFile(selectedFile);
@@ -555,12 +584,17 @@ public class ECGFrame extends javax.swing.JFrame {
             runs = components / sigs;
         }
         // Build a matrix containing all the signals in the file.
-        double[][] signals = new double[sigs * runs][sigCount];
+        double[][] signals = new double[components][sigCount];
 
         for (int k = 0; k < runs; k++) {
             for (int i = (k * sigs); i < (sigs + (k * sigs)); i++) {
                 int signalId = ((ComboItem) selItems[i - (k * sigs)]).getId();
                 signals[i] = Reader.readSamples(signalId, sigCount);
+
+                // TEST
+                int n = Integer.parseInt(filterTxt.getText());
+                signals[i] = NoiseReduction.medianFilter(signals[i], n);
+                // END TEST
 
                 if (FourierDomain.isSelected()) {
                     signals[i] = DFT.forward(signals[i]);
@@ -576,7 +610,37 @@ public class ECGFrame extends javax.swing.JFrame {
         }
         Reader.closeEDFFile();
 
-        signals = FastICA.fastICA(signals, 50, 0.001, components);
+        CompositeEVFilter filter = new CompositeEVFilter();
+        filter.add(new BelowEVFilter(1.0e-8, false));
+        filter.add(new SortingEVFilter(true, true));
+        // build a ICA configuration
+        FastICAConfig config = new FastICAConfig(
+                components,
+                FastICAConfig.Approach.SYMMETRIC,
+                1.0, 1.0e-16, 1000, null);
+        // build the progress listener
+        ProgressListener listener =
+                new ProgressListener() {
+
+                    public void progressMade(
+                            ComputationState state,
+                            int component,
+                            int iteration,
+                            int maxComps) {
+                        System.out.print(
+                                "\r"
+                                + Integer.toString(component) + " - "
+                                + Integer.toString(iteration) + "     ");
+                    }
+                };
+        // perform the independent component analysis
+        System.out.println("Performing ICA");
+        try {
+            org.fastica.FastICA fica = new org.fastica.FastICA(signals, config, new TanhCFunction(3), filter, listener);
+            signals = fica.getICVectors();
+        } catch (FastICAException ex) {
+            System.out.println(ex);
+        }
 
 
         for (int i = 0; i < signals.length; i++) {
@@ -589,12 +653,84 @@ public class ECGFrame extends javax.swing.JFrame {
                 DWT.d4CompleteInvTransform(signals[i]);
             }
         }
+        //
+
+        /*
+        int sigCount = Integer.parseInt(sigCountText.getText());
+        
+        Reader.openEDFFile(selectedFile);
+        
+        Object[] selItems = signalList.getSelectedValues();
+        int sigs = selItems.length;
+        int components = Integer.parseInt(componentsTxt.getText());
+        
+        int runs = 1;
+        if (sigs < components) {
+        runs = components / sigs;
+        }
+        // Build a matrix containing all the signals in the file.
+        double[][] signals = new double[sigs * runs][sigCount];
+        
+        for (int k = 0; k < runs; k++) {
+        for (int i = (k * sigs); i < (sigs + (k * sigs)); i++) {
+        int signalId = ((ComboItem) selItems[i - (k * sigs)]).getId();
+        signals[i] = Reader.readSamples(signalId, sigCount);
+        
+        // TEST
+        int n = Integer.parseInt(filterTxt.getText());
+        signals[i] = NoiseReduction.medianFilter(signals[i], n);
+        // END TEST
+        
+        if (FourierDomain.isSelected()) {
+        signals[i] = DFT.forward(signals[i]);
+        }
+        
+        if (dwtPreFilter.isSelected()) {
+        // Do some noise-reduction
+        DWT.d4CompleteTransform(signals[i]);
+        signals[i] = NoiseReduction.reduceNoiseDynamicT(signals[i]);
+        DWT.d4CompleteInvTransform(signals[i]);
+        }
+        }
+        }
+        Reader.closeEDFFile();
+        
+        signals = FastICA.fastICA(signals, 50, 0.001, components);
+        
+        
+        for (int i = 0; i < signals.length; i++) {
+        if (FourierDomain.isSelected()) {
+        signals[i] = DFT.reverse(signals[i]);
+        }
+        if (dwtPostFilter.isSelected()) {
+        DWT.d4CompleteTransform(signals[i]);
+        signals[i] = NoiseReduction.reduceNoiseDynamicT(signals[i]);
+        DWT.d4CompleteInvTransform(signals[i]);
+        }
+        }
+         *
+         */
         drawComponents("ICA extracted signal", signals);
     }//GEN-LAST:event_fastICAButtonActionPerformed
 
     private void fourierRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fourierRadioButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_fourierRadioButtonActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        int window = Integer.parseInt(windowTxt.getText());
+        double[][] specto = Spectogram.create(50, samples, 0);
+        JFrame graphForm = new JFrame();
+        graphForm.setSize(500, 300);
+        graphForm.setLocation(100, 100);
+        Container cPane = graphForm.getContentPane();
+        SpectoPanel gPanel = new SpectoPanel();
+        gPanel.setSize(300, 300);
+        cPane.add(gPanel);
+        gPanel.drawSpecto(specto);
+        graphForm.setVisible(true);
+        graphForm.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     private void drawComponents(String name, double[][] components) {
 
@@ -775,10 +911,12 @@ public class ECGFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -795,5 +933,6 @@ public class ECGFrame extends javax.swing.JFrame {
     private javax.swing.JList signalList;
     private javax.swing.JComboBox signalNamesList;
     private javax.swing.ButtonGroup transformButtonGroup;
+    private javax.swing.JTextField windowTxt;
     // End of variables declaration//GEN-END:variables
 }
