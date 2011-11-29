@@ -39,6 +39,7 @@ public class SpectoPanel extends javax.swing.JPanel {
 
         for (int j = 1; j < data.length; j++) {
             int offset = j*(window-overlap);
+            System.out.println("[" + j + "] Start at: " + offset + " end at: " + (offset + window));
             for (int i = 0; i < window; i++) {
                 series.add(offset + i, data[j][i]);
             }
