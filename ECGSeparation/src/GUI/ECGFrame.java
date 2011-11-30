@@ -741,8 +741,8 @@ public class ECGFrame extends javax.swing.JFrame {
         SpectoPanel gPanel = new SpectoPanel();
         gPanel.setSize(300, 300);
         cPane.add(gPanel);
-        gPanel.drawSpecto(specto, overlap, window);
-        //gPanel.drawSpecto(specto);
+        //gPanel.drawSpecto(specto, overlap, window);
+        gPanel.drawSpecto(specto, overlap);
         graphForm.setVisible(true);
         graphForm.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -804,7 +804,7 @@ public class ECGFrame extends javax.swing.JFrame {
 
         } else { //Fourier here!
             double[] newSig = Arrays.copyOf(samples, samples.length);
-            transformed = DFT.DiscreteFourier(newSig);
+            transformed = DFT.forward(newSig);
             return transformed;
 //            Complex[] cSig = new Complex[samples.length];
 //            for (int i = 0; i < samples.length; i++) {

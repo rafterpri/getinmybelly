@@ -23,6 +23,7 @@ public class Spectogram {
             double[] fSignals = new double[length];
 
             System.arraycopy(signal, start, fSignals, 0, length);
+            //fSignals = DFT.DiscreteFourier(fSignals);
             fSignals = DFT.forward(fSignals);
             System.arraycopy(fSignals, 0, specto[i], 0, length);
         }

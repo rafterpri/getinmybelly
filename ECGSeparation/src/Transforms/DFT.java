@@ -10,14 +10,14 @@ package Transforms;
  */
 public class DFT {
 
-    public static double[] DiscreteFourier(double data[]) {
+    public static double[] DiscreteFourier(double data[], int k) {
         int N = data.length;
-        double result[] = new double[N];
+        double result[] = new double[k];
         double[] r_data = new double[N];
         double[] i_data = new double[N];
         double p;
 
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < k; i++) {
             for (int j = 0; j < N; j++) {
                 p = 2 * Math.PI * i * j / N;
                 r_data[i] += data[j] * Math.cos(p);
