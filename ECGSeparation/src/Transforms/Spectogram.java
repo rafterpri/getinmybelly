@@ -25,7 +25,7 @@ public class Spectogram {
                 break;
             }
 
-            System.out.println("[" + i + "] Start at: " + start + " end at: " + (start + length));
+            //System.out.println("[" + i + "] Start at: " + start + " end at: " + (start + length));
             double[] fSignals = new double[length];
 
             System.arraycopy(signal, start, fSignals, 0, length);

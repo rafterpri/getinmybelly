@@ -72,8 +72,11 @@ public class SpectoPanel extends javax.swing.JPanel {
 
         xWidth = this.getWidth() / data.length; // Size of a single value on y axis
         yHeight = this.getHeight() / data[0].length;    // Size of a single value on y axis
-        if(yHeight == 0) {
+        if (yHeight == 0) {
             yHeight = 1;
+        }
+        if (xWidth == 0) {
+            xWidth = 1;
         }
         double maxSig = Math.max(Math.abs(max), Math.abs(min));
         crange = 255 / (maxSig);
@@ -126,5 +129,4 @@ public class SpectoPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_formComponentResized
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
-
 }
