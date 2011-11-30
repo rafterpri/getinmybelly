@@ -6,16 +6,16 @@ package Transforms.math;
  * @author Michael Lambertz
  */
 public class Vector {
-    
+
     public static double[] normalize(double[] input) {
         double sumSquares = 0.0;
         // First calculate the length
-        for(int i =0; i < input.length; i++) {
-            sumSquares += Math.pow(input[i],2);
+        for (int i = 0; i < input.length; i++) {
+            sumSquares += Math.pow(input[i], 2);
         }
         // The actual length of the vector
         double len = Math.sqrt(sumSquares);
-        return Vector.scale(1/len, input);
+        return Vector.scale(1 / len, input);
     }
 
     /**
@@ -210,5 +210,20 @@ public class Vector {
             }
         }
         return (res);
+    }
+
+    public static double[] center(double[] vec) {
+        int n = vec.length;
+        double mValue = 0.0;
+        for (int i = 0; i < n; i++) {
+            mValue += vec[i];
+        }
+        mValue /= n;
+
+        double[] cVec = new double[n];
+        for(int i = 0; i < n ;i++) {
+            cVec[i] = vec[i]-mValue;
+        }
+        return cVec;
     }
 }

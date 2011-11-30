@@ -1,5 +1,6 @@
 package Signals;
 
+import Transforms.math.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.xvolks.jnative.JNative;
@@ -78,7 +79,7 @@ public class Reader {
                     for (int i = 0; i < samplesRead; i++) {
                         smp[i] = p.getAsDouble(i * sdouble);
                     }
-                    return smp;
+                    return Vector.center(smp);
                 }
             } catch (Exception ex) {
                 Logger.getLogger(Reader.class.getName()).log(Level.SEVERE, null, ex);

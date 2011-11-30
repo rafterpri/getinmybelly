@@ -1,5 +1,8 @@
 package Transforms;
 
+import Transforms.math.BlackmanWindow;
+import Transforms.math.Window;
+
 /**
  * Creates a spectogram from given data
  * @author Tom Pepels
@@ -7,8 +10,11 @@ package Transforms;
 public class Spectogram {
 
     public static double[][] create(int window, double[] signal, int overlap) {
+        
+        Window w = new BlackmanWindow();
+        signal = w.timesW(signal);
         int partitions = signal.length / (window - overlap);// window;
-        double[][] specto = new double[partitions][window];
+        double[][] specto = new double[partitions][window/2];
         System.out.println("Partitions: " + partitions);
         for (int i = 0; i < partitions - 1; i++) {
 
@@ -25,7 +31,8 @@ public class Spectogram {
             System.arraycopy(signal, start, fSignals, 0, length);
             //fSignals = DFT.DiscreteFourier(fSignals);
             fSignals = DFT.forward(fSignals);
-            System.arraycopy(fSignals, 0, specto[i], 0, length);
+
+            System.arraycopy(fSignals, 0, specto[i], 0, length/2);
         }
 
         return specto;
