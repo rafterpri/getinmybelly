@@ -5,11 +5,14 @@ import Transforms.*;
 import Signals.Reader;
 import java.awt.Container;
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileSystemView;
 
 /**
  *
@@ -507,6 +510,30 @@ public class ECGFrame extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         final JFileChooser fc = new JFileChooser();
+        fc.setFileFilter(new FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                if (f.isDirectory()) {
+                    return true;
+                }
+
+                String extension = Utils.getExtension(f);
+                if (extension != null) {
+                    if (extension.equals("edf")) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+                return false;
+            }
+
+            @Override
+            public String getDescription() {
+                return ".edf files";
+            }
+        });
         int returnVal = fc.showOpenDialog(this);
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
