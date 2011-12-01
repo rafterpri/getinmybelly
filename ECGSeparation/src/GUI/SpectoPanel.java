@@ -92,6 +92,8 @@ public class SpectoPanel extends javax.swing.JPanel {
                     double val = data[i][j];
                     double r = Math.abs(val) * crange;
                     Color col = new Color(255, (int) r, 0);
+//                    if(r<84)
+//                        col = new Color(0, (int) r, (int)(2*r));
                     g.setColor(col);
                     g.fillRect(i * xWidth, (j * yHeight) + yHeight, xWidth, yHeight);
                 }

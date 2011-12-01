@@ -421,11 +421,16 @@ public class ECGFrame extends javax.swing.JFrame {
 
         jLabel5.setText("Window:");
 
-        windowTxt.setText("500");
+        windowTxt.setText("50");
+        windowTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                windowTxtActionPerformed(evt);
+            }
+        });
 
         jLabel6.setText("Overlap:");
 
-        overlapTxt.setText("100");
+        overlapTxt.setText("40");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -501,7 +506,7 @@ public class ECGFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE)))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -761,6 +766,9 @@ public class ECGFrame extends javax.swing.JFrame {
         int window = Integer.parseInt(windowTxt.getText());
         int overlap = Integer.parseInt(overlapTxt.getText());
         double[][] specto = Spectogram.create(window, samples, overlap);
+        double[] rev = Spectogram.inverse(overlap, specto);
+        samples = rev;
+        drawGraph("Reverse Specto Test", false);
         JFrame graphForm = new JFrame();
         graphForm.setSize(500, 300);
         graphForm.setLocation(100, 100);
@@ -773,6 +781,10 @@ public class ECGFrame extends javax.swing.JFrame {
         graphForm.setVisible(true);
         graphForm.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void windowTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_windowTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_windowTxtActionPerformed
 
     private void drawComponents(String name, double[][] components) {
 

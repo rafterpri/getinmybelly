@@ -16,7 +16,7 @@ public class Spectogram {
         int partitions = signal.length / (window - overlap);// window;
         double[][] specto = new double[partitions][window/2];
         System.out.println("Partitions: " + partitions);
-        for (int i = 0; i < partitions - 1; i++) {
+        for (int i = 0; i < partitions; i++) {
 
             int start = i * (window - overlap);
             int length = window;
@@ -39,7 +39,20 @@ public class Spectogram {
         return specto;
     }
 
-    public static double[] inverse(int window, double[][] specto) {
-        return new double[0];
+    public static double[] inverse(int overlap, double[][] specto) {
+        double[][] spectoN = specto.clone();
+        for(int i = 0; i < spectoN.length; i++) {
+            spectoN[i] = DFT.reverse(specto[i]);
+        }
+        int window = spectoN[0].length*2;
+        double [] signal = new double[spectoN.length*(window-overlap)];
+        
+        for (int i = 0; i < spectoN.length ; i++) {
+            int length = spectoN[0].length;
+            if((window-overlap)*i+length > signal.length)
+                length =signal.length-(window-overlap)*i;
+            System.arraycopy(spectoN[i], 0, signal, (window-overlap)*i, length);
+        }
+        return signal;
     }
 }
