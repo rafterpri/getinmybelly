@@ -40,9 +40,21 @@ public class Spectogram {
     }
 
     public static double[] inverse(int overlap, double[][] specto) {
-        double[][] spectoN = specto.clone();
+        Window w = new BlackmanWindow();
+        double[][] spectoNew = specto.clone();
+        double[][] spectoN = new double[spectoNew.length][spectoNew[0].length*2];
+        for (int i = 0; i < spectoN.length; i++) {
+            for (int j = 0; j < spectoN[0].length; j++) {
+                if(j<spectoNew[0].length)
+                    spectoN[i][j] = spectoNew[i][j];
+                else
+                    spectoN[i][j] = spectoNew[i][spectoNew[i].length-1-(j-spectoNew[i].length)];
+            }
+        }
         for(int i = 0; i < spectoN.length; i++) {
+            
             spectoN[i] = DFT.reverse(specto[i]);
+            spectoN[i] = w.inverseW(specto[i]);
         }
         int window = spectoN[0].length*2;
         double [] signal = new double[spectoN.length*(window-overlap)];

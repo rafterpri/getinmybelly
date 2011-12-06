@@ -31,4 +31,14 @@ public class BlackmanWindow implements Window {
         }
         return out;
     }
+
+    @Override
+    public double[] inverseW(double[] in) {
+        int n = in.length;
+        double[] out = new double[n];
+        for(int i = 0 ; i < n ; i++) {
+            out[i] = in[i]/w(i,n);
+        }
+        return out;
+    }
 }

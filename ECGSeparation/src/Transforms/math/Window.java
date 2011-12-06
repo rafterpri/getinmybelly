@@ -25,4 +25,6 @@ public interface Window {
      */
     public double[] timesW(double[] in);
 
+    
+    public double[] inverseW(double[] in);
 }
