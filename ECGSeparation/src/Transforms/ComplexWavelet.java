@@ -3,20 +3,24 @@ package Transforms;
 public class ComplexWavelet {
 	
 	private static double[] rawSignal;
+	private static Complex[] rawMaternal;
+	private static Complex[] rawFetal;
 	private static CWT maternalCWT;
 	private static CWT fetalCWT;
 	
 	public static double[][] complexCWT(double[][] input) {
-		// Creating all the Data and methods that need to be used
+		// Creating all the preprocessed data and methods that need to be used
 		rawSignal = avgSignal(input);
 		maternalCWT = new CWT(3,1,0.5);
 		fetalCWT = new CWT(1,1,0.5);
 		
 		// Maternal ECG calculation
-		CWT.complexTransform(rawSignal);
+		rawMaternal = CWT.complexTransform(rawSignal);
 		
 		// Fetal ECG calculation
-		CWT.complexTransform(rawSignal);
+		rawFetal = CWT.complexTransform(rawSignal);
+		
+		// Post processing of both signals to detect the overlapped fetal QRS and the rejection of the misdetected QRS points
 		
 	}
 	
@@ -34,5 +38,20 @@ public class ComplexWavelet {
             av[i] /= input.length;
         }
         return DFT.reverse(av);
+    }
+    
+    public static double[] postProcess(double[] input) {
+    	
+    	for(int i = 1; i < input.length-1; i++) {
+    		if((input[i+1] - input[i]) > (1.5*(input[i] - input[i-1]))) {
+    			// Possible overlap
+    		}
+    		else if((input[i+1] - input[i]) < (1.5*(input[i] - input[i-1])) && ((input[i+1] - input[i]) > (0.45*(input[i] - input[i-1])))) {
+    			// Continue with next peak
+    		}
+    		else if((input[i+1] - input[i]) > (0.45*(input[i] - input[i-1])))) {
+    			// Misdetected fetal QRS exists
+    		}
+    	}
     }
 }
