@@ -1,5 +1,6 @@
 package Transforms;
 
+import Jama.SingularValueDecomposition;
 import Transforms.math.*;
 import java.util.Arrays;
 
@@ -23,7 +24,7 @@ public class FastICA {
     private static int iterationLimit = 10;
 
     /**
-     * Finds a certain number of indepentent components of the inout signal using fastica
+     * Finds a certain number of indepentent components of the input signal using fastica
      * @param input the input signals
      * @param maxIterations maximum number of iterations
      * @param epsilon level of accuracy
@@ -32,7 +33,8 @@ public class FastICA {
      */
     public static double[][] fastICA(double[][] input, int maxIterations, double epsilon, int noComponents) {
         whitening(input);
-
+        SingularValueDecomposition svd = new SingularValueDecomposition(new Jama.Matrix(input));
+        svd.getSingularValues();
         int m = Matrix.getNumOfRows(whitenedVectors);
         int n = Matrix.getNumOfColumns(whitenedVectors);
 

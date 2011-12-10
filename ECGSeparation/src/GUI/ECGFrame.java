@@ -765,8 +765,8 @@ public class ECGFrame extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         int window = Integer.parseInt(windowTxt.getText());
         int overlap = Integer.parseInt(overlapTxt.getText());
-        double[][] specto = Spectogram.create(window, samples, overlap);
-        double[] rev = Spectogram.inverse(overlap, specto);
+        double[][] specto = Spectrogram.create(window, samples, overlap);
+        double[] rev = Spectrogram.inverse(overlap, specto);
         samples = rev;
         drawGraph("Reverse Specto Test", false);
         JFrame graphForm = new JFrame();

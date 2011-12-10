@@ -4,10 +4,10 @@ import Transforms.math.BlackmanWindow;
 import Transforms.math.Window;
 
 /**
- * Creates a spectogram from given data
+ * Creates a spectrogram from given data
  * @author Tom Pepels
  */
-public class Spectogram {
+public class Spectrogram {
 
     public static double[][] create(int window, double[] signal, int overlap) {
         

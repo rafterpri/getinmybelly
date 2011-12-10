@@ -21,7 +21,7 @@ public class ComplexWavelet {
 		rawFetal = CWT.complexTransform(rawSignal);
 		
 		// Post processing of both signals to detect the overlapped fetal QRS and the rejection of the misdetected QRS points
-		
+		return new double[0][0];
 	}
 	
     public static double[] avgSignal(double[][] input) {
@@ -49,9 +49,10 @@ public class ComplexWavelet {
     		else if((input[i+1] - input[i]) < (1.5*(input[i] - input[i-1])) && ((input[i+1] - input[i]) > (0.45*(input[i] - input[i-1])))) {
     			// Continue with next peak
     		}
-    		else if((input[i+1] - input[i]) > (0.45*(input[i] - input[i-1])))) {
+    		else if((input[i+1] - input[i]) > (0.45*(input[i] - input[i-1]))) {
     			// Misdetected fetal QRS exists
     		}
     	}
+        return new double[0];
     }
 }
