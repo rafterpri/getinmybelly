@@ -521,7 +521,6 @@ public class ECGFrame extends javax.swing.JFrame {
                 if (f.isDirectory()) {
                     return true;
                 }
-
                 String extension = Utils.getExtension(f);
                 if (extension != null) {
                     if (extension.equals("edf")) {
@@ -530,10 +529,8 @@ public class ECGFrame extends javax.swing.JFrame {
                         return false;
                     }
                 }
-
                 return false;
             }
-
             @Override
             public String getDescription() {
                 return ".edf files";

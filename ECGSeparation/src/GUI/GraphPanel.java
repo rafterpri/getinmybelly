@@ -71,10 +71,10 @@ public class GraphPanel extends javax.swing.JPanel {
         chart.setAntiAlias(true);
         
         xyPlot = chart.getXYPlot();
-        xyPlot.setBackgroundPaint(Color.black);
-        xyPlot.setDomainGridlinePaint(Color.white);
-        xyPlot.setRangeGridlinePaint(Color.white);
-        xyPlot.setRangeZeroBaselinePaint(Color.white);
+        xyPlot.setBackgroundPaint(Color.white);
+        xyPlot.setDomainGridlinePaint(Color.gray);
+        xyPlot.setRangeGridlinePaint(Color.gray);
+        xyPlot.setRangeZeroBaselinePaint(Color.DARK_GRAY);
         xyPlot.getRangeAxis().setAutoRange(true);
         xyPlot.setRangeZeroBaselineVisible(true);
 
