@@ -33,8 +33,6 @@ public class FastICA {
      */
     public static double[][] fastICA(double[][] input, int maxIterations, double epsilon, int noComponents) {
         whitening(input);
-        SingularValueDecomposition svd = new SingularValueDecomposition(new Jama.Matrix(input));
-        svd.getSingularValues();
         int m = Matrix.getNumOfRows(whitenedVectors);
         int n = Matrix.getNumOfColumns(whitenedVectors);
 
