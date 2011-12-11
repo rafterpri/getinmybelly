@@ -13,8 +13,8 @@ public class DFT {
     public static double[] DiscreteFourier(double data[], int k) {
         int N = data.length;
         double result[] = new double[k];
-        double[] r_data = new double[N];
-        double[] i_data = new double[N];
+        double[] r_data = new double[k];
+        double[] i_data = new double[k];
         double p;
 
         for (int i = 0; i < k; i++) {

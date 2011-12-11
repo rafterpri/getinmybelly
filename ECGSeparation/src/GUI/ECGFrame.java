@@ -741,7 +741,6 @@ public class ECGFrame extends javax.swing.JFrame {
 
         signals = FastICA.fastICA(signals, 50, 0.001, components);
 
-
         for (int i = 0; i < signals.length; i++) {
             if (FourierDomain.isSelected()) {
                 signals[i] = DFT.reverse(signals[i]);

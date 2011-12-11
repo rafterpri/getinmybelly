@@ -51,6 +51,7 @@ public class FastICA {
             for (int c = 0; c < noComponents; c++) {
                 //Step 1
                 double[] prevW = Matrix.getVecOfRow(oldB, c);
+                
                 double[] firstPart = new double[m];
 
                 for (int j = 0; j < n; j++) {
@@ -72,15 +73,6 @@ public class FastICA {
                 //
 
                 // End of step 2
-
-
-                // Step 3
-                /* if (c > 0 && k < iterationLimit) { // After a certain number of iterations dont do the extra setp anymore
-                w = Vector.sub(w, Matrix.mult(Matrix.mult(B, Matrix.transpose(B)), w)); //New stuff for step 3 
-                } */
-                //w = Vector.normalize(w);
-
-                // End of step 3
 
                 // write new vector to the matrix
                 for (int j = 0; j < m; ++j) {
@@ -174,7 +166,7 @@ public class FastICA {
         eigenValues = eigenDeco.getEigenValues();
         
         //Eigenvaluefilter
-        System.out.println("Eigenvalues: ");
+        /* System.out.println("Eigenvalues: ");
         for(int i = 0 ;i < eigenValues.length ; i++)
             System.out.println((i+1)+": "+eigenValues[i]);
         EigenValueFilter ev = new BelowEVFilter(0.01, false);
@@ -183,7 +175,7 @@ public class FastICA {
         System.out.println("New Eigenvalues: ");
         for(int i = 0 ;i < eigenValues.length ; i++)
             System.out.println((i+1)+": "+eigenValues[i]);
-        E = ev.getEigenVectors();
+        E = ev.getEigenVectors(); */
         // Continue with new eigenvalues and vectors
         
         // calculate the resulting vectors

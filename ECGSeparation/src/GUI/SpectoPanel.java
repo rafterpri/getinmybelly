@@ -79,7 +79,7 @@ public class SpectoPanel extends javax.swing.JPanel {
             xWidth = 1;
         }
         double maxSig = Math.max(Math.abs(max), Math.abs(min));
-        crange = 255 / (maxSig);
+        crange = (3 * 255) / (maxSig);
     }
 
     @Override
@@ -89,13 +89,21 @@ public class SpectoPanel extends javax.swing.JPanel {
             // Find the max value
             for (int i = 0; i < data.length; i++) {
                 for (int j = 0; j < data[i].length; j++) {
-                    double val = data[i][j];
+
+                    double val = Math.abs(data[i][j]);
                     double r = Math.abs(val) * crange;
-                    Color col = new Color(255, (int) r, 0);
-//                    if(r<84)
-//                        col = new Color(0, (int) r, (int)(2*r));
+
+                    Color col = new Color(0, 0, 0);
+                    if (r >= (2 * (255))) {
+                        col = new Color(255, (int) (r - (2 * 255)), 0);
+                    } else if (r >= 255) {
+                        col = new Color(0, (int) (r - 255), 255);
+                    } else {
+                        col = new Color(0, (int) r, 0);
+                    }
                     g.setColor(col);
-                    g.fillRect(i * xWidth, (j * yHeight) + yHeight, xWidth, yHeight);
+                    //g.fillRect(i * xWidth, (j * yHeight), xWidth, yHeight);
+                    g.fillRect(i*1, j*2, 1, 2);
                 }
             }
         }
