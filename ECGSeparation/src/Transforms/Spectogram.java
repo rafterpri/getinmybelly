@@ -2,6 +2,7 @@ package Transforms;
 
 import Transforms.math.BlackmanWindow;
 import Transforms.math.Window;
+import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
 
 /**
  * Creates a spectogram from given data
@@ -34,12 +35,14 @@ public class Spectogram {
             sourceSignals = w.timesW(sourceSignals); 
             
             double[] transformedSignals = new double[length];
-            transformedSignals = DFT.forward(sourceSignals);
+            DoubleFFT_1D fft = new DoubleFFT_1D(length);
+            fft.realForward(signal);
+            //transformedSignals = DFT.forward(sourceSignals);
             //transformedSignals = w.timesW(transformedSignals);
             //DWT.d4CompleteInvTransform(sourceSignals);
             //sourceSignals = DWT.discreteHaarWaveletTransform(sourceSignals);
             //System.arraycopy(sourceSignals, 0, specto[i], 0, length);
-            System.arraycopy(transformedSignals, length / 2, specto[i], 0, length/2);
+            System.arraycopy(signal, length, specto[i], 0, length);
         }
 
         return specto;

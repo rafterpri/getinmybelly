@@ -97,13 +97,13 @@ public class SpectoPanel extends javax.swing.JPanel {
                     if (r >= (2 * (255))) {
                         col = new Color(255, (int) (r - (2 * 255)), 0);
                     } else if (r >= 255) {
-                        col = new Color(0, (int) (r - 255), 255);
+                        col = new Color(0, (int) (r - 255), 255 - (int)(r-255));
                     } else {
-                        col = new Color(0, (int) r, 0);
+                        col = new Color(0, (int) r, 255);
                     }
                     g.setColor(col);
                     //g.fillRect(i * xWidth, (j * yHeight), xWidth, yHeight);
-                    g.fillRect(i*1, j*2, 1, 2);
+                    g.fillRect(i*2, j*2, 2, 2);
                 }
             }
         }
