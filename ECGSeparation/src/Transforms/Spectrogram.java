@@ -2,6 +2,7 @@ package Transforms;
 
 import Transforms.math.BlackmanWindow;
 import Transforms.math.Window;
+import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
 
 /**
  * Creates a spectrogram from given data
@@ -12,14 +13,13 @@ public class Spectrogram {
     public static double[][] create(int window, double[] signal, int overlap) {
         
         Window w = new BlackmanWindow();
-        //signal = w.timesW(signal);
         int partitions = signal.length / (window - overlap);// window;
-        double[][] specto = new double[partitions][window/2];
+        double[][] specto = new double[partitions][window*2];
         System.out.println("Partitions: " + partitions);
         for (int i = 0; i < partitions; i++) {
 
             int start = i * (window - overlap);
-            int length = window;
+            int length = window * 2;
 
             if (start + window > signal.length) {
                 break;
@@ -28,12 +28,15 @@ public class Spectrogram {
             //System.out.println("[" + i + "] Start at: " + start + " end at: " + (start + length));
             double[] fSignals = new double[length];
 
-            System.arraycopy(signal, start, fSignals, 0, length);
+            System.arraycopy(signal, start, fSignals, 0, length/2);
+            DoubleFFT_1D fft = new DoubleFFT_1D(length/2);
             //fSignals = DFT.DiscreteFourier(fSignals);
+            
+            fft.realForwardFull(fSignals);
             fSignals = w.timesW(fSignals); 
-            fSignals = DFT.forward(fSignals);
-
-            System.arraycopy(fSignals, 0, specto[i], 0, length/2);
+            //fSignals = DFT.forward(fSignals);
+            System.arraycopy(fSignals, 0, specto[i], 0, fSignals.length);
+            //System.arraycopy(fSignals, 0, specto[i], 0, length/2);
         }
 
         return specto;
