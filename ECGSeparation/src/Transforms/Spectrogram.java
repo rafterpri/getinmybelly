@@ -37,6 +37,7 @@ public class Spectrogram {
             //fSignals = DFT.forward(fSignals);
             System.arraycopy(fSignals, 0, specto[i], 0, fSignals.length);
             //System.arraycopy(fSignals, 0, specto[i], 0, length/2);
+            
         }
 
         return specto;
