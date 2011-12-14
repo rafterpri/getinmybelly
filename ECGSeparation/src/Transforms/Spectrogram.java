@@ -31,11 +31,14 @@ public class Spectrogram {
             System.arraycopy(signal, start, fSignals, 0, length/2);
             DoubleFFT_1D fft = new DoubleFFT_1D(length/2);
             //fSignals = DFT.DiscreteFourier(fSignals);
-            
-            fft.realForwardFull(fSignals);
             fSignals = w.timesW(fSignals); 
+            fft.complexForward(fSignals);
+            double[] outSignals = new double[fSignals.length/2];
+            for(int j = 0 ; j < outSignals.length ; j++) {
+                outSignals[j] = Math.sqrt(fSignals[2*j]*fSignals[2*j] + fSignals[2*j+1]*fSignals[2*j+1]);
+            }
             //fSignals = DFT.forward(fSignals);
-            System.arraycopy(fSignals, 0, specto[i], 0, fSignals.length);
+            System.arraycopy(outSignals, 0, specto[i], 0, outSignals.length);
             //System.arraycopy(fSignals, 0, specto[i], 0, length/2);
             
         }
@@ -44,6 +47,7 @@ public class Spectrogram {
     }
 
     public static double[] inverse(int overlap, double[][] specto) {
+        DoubleFFT_1D fft = new DoubleFFT_1D(specto[0].length/2);
         Window w = new BlackmanWindow();
         double[][] spectoNew = specto.clone();
         double[][] spectoN = new double[spectoNew.length][spectoNew[0].length*2];
@@ -56,9 +60,8 @@ public class Spectrogram {
             }
         }
         for(int i = 0; i < spectoN.length; i++) {
-            
-            spectoN[i] = DFT.reverse(specto[i]);
             spectoN[i] = w.inverseW(specto[i]);
+            fft.realInverseFull(spectoN[i], true);           
         }
         int window = spectoN[0].length*2;
         double [] signal = new double[spectoN.length*(window-overlap)];
