@@ -49,11 +49,11 @@ public class Complex extends Object {
         @return |z| where z is this Complex number.
     */
     public double mod() {
-        if (x!=0 || y!=0) {
+//        if (x!=0 || y!=0) {
             return Math.sqrt(x*x+y*y);
-        } else {
-            return 0d;
-        }
+//        } else {
+//            return 0d;
+//        }
     }
     
     /**

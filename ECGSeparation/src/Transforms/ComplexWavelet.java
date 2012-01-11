@@ -15,10 +15,10 @@ public class ComplexWavelet {
 		fetalCWT = new CWT(1,1,0.5);
 		
 		// Maternal ECG calculation
-		rawMaternal = CWT.complexTransform(rawSignal);
+		rawMaternal = maternalCWT.complexTransform(rawSignal);
 		
 		// Fetal ECG calculation
-		rawFetal = CWT.complexTransform(rawSignal);
+		rawFetal = fetalCWT.complexTransform(rawSignal);
 		
 		// Post processing of both signals to detect the overlapped fetal QRS and the rejection of the misdetected QRS points
 		return new double[0][0];

@@ -50,7 +50,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jPanel2" pref="560" max="32767" attributes="0"/>
+                      <Component id="jPanel2" pref="563" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -274,7 +274,7 @@
                           <Component id="windowTxt" min="-2" pref="74" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="88" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -332,10 +332,14 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="fourierRadioButton" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="d4RadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="d4RadioButton" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="ComplexRadioButton" min="-2" max="-2" attributes="0"/>
+                          </Group>
                           <Component id="jButton3" alignment="0" min="-2" max="-2" attributes="1"/>
                       </Group>
-                      <EmptySpace pref="56" max="32767" attributes="0"/>
+                      <EmptySpace pref="28" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -347,7 +351,10 @@
                           <Component id="fourierRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="d4RadioButton" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="d4RadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="ComplexRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jButton2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -404,6 +411,14 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
               </Events>
             </Component>
+            <Component class="javax.swing.JRadioButton" name="ComplexRadioButton">
+              <Properties>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="transformButtonGroup"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Complex"/>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel5">
@@ -429,7 +444,7 @@
                               <Component id="filterTxt" min="-2" pref="75" max="-2" attributes="1"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="90" max="32767" attributes="0"/>
+                      <EmptySpace pref="118" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -581,7 +596,7 @@
                           <Component id="FourierDomain" min="-2" max="-2" attributes="1"/>
                           <Component id="dwtPreFilter" min="-2" max="-2" attributes="0"/>
                           <Component id="dwtPostFilter" min="-2" max="-2" attributes="0"/>
-                          <Component id="fastICAButton" alignment="0" pref="126" max="32767" attributes="0"/>
+                          <Component id="fastICAButton" alignment="0" pref="154" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>

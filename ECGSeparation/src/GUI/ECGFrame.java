@@ -68,6 +68,7 @@ public class ECGFrame extends javax.swing.JFrame {
         fourierRadioButton = new javax.swing.JRadioButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        ComplexRadioButton = new javax.swing.JRadioButton();
         jPanel5 = new javax.swing.JPanel();
         medianFilterButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
@@ -230,6 +231,9 @@ public class ECGFrame extends javax.swing.JFrame {
             }
         });
 
+        transformButtonGroup.add(ComplexRadioButton);
+        ComplexRadioButton.setText("Complex");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -242,9 +246,12 @@ public class ECGFrame extends javax.swing.JFrame {
                         .addComponent(haarRadioButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(fourierRadioButton))
-                    .addComponent(d4RadioButton)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(d4RadioButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(ComplexRadioButton))
                     .addComponent(jButton3))
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -253,7 +260,9 @@ public class ECGFrame extends javax.swing.JFrame {
                     .addComponent(haarRadioButton)
                     .addComponent(fourierRadioButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(d4RadioButton)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(d4RadioButton)
+                    .addComponent(ComplexRadioButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -294,7 +303,7 @@ public class ECGFrame extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(filterTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(90, Short.MAX_VALUE))
+                .addContainerGap(118, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -390,7 +399,7 @@ public class ECGFrame extends javax.swing.JFrame {
                     .addComponent(FourierDomain)
                     .addComponent(dwtPreFilter)
                     .addComponent(dwtPostFilter)
-                    .addComponent(fastICAButton, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE))
+                    .addComponent(fastICAButton, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -460,7 +469,7 @@ public class ECGFrame extends javax.swing.JFrame {
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(windowTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(60, 60, 60))
+                .addGap(88, 88, 88))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -508,7 +517,7 @@ public class ECGFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -839,7 +848,7 @@ public class ECGFrame extends javax.swing.JFrame {
             DWT.d4CompleteTransform(transformed);
             return transformed;
 
-        } else { //Fourier here!
+        } else if(fourierRadioButton.isSelected()){ //Fourier here!
             double[] newSig = Arrays.copyOf(samples, samples.length);
             transformed = DFT.forward(newSig);
             return transformed;
@@ -853,6 +862,13 @@ public class ECGFrame extends javax.swing.JFrame {
 //                transformed[i] = cSig[i].mod();
 //            }
 //            return transformed; 
+        } else { // Complex wavelet transform for testing (2,1,0.5) <-- baby, (3,1,0.5) <-- mommy
+            Complex[] c = new CWT(2,1,0.5).complexTransform(samples);
+            transformed = new double[c.length];
+            for(int i = 0 ; i < c.length ; i++) {
+                transformed[i] = c[i].mod();
+            }
+            return transformed;
         }
     }
 
@@ -940,6 +956,7 @@ public class ECGFrame extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton ComplexRadioButton;
     private javax.swing.JCheckBox FourierDomain;
     private javax.swing.JRadioButton addToRadio;
     private javax.swing.JButton clear1Button;
