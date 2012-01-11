@@ -12,7 +12,7 @@ public class ComplexWavelet {
 		// Creating all the preprocessed data and methods that need to be used
 		rawSignal = avgSignal(input);
 		maternalCWT = new CWT(3,1,0.5);
-		fetalCWT = new CWT(1,1,0.5);
+		fetalCWT = new CWT(2,1,0.5);
 		
 		// Maternal ECG calculation
 		rawMaternal = maternalCWT.complexTransform(rawSignal);

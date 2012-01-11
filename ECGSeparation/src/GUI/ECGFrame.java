@@ -69,6 +69,7 @@ public class ECGFrame extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         ComplexRadioButton = new javax.swing.JRadioButton();
+        ComplexMethodButton = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         medianFilterButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
@@ -234,6 +235,13 @@ public class ECGFrame extends javax.swing.JFrame {
         transformButtonGroup.add(ComplexRadioButton);
         ComplexRadioButton.setText("Complex");
 
+        ComplexMethodButton.setText("Complex Method");
+        ComplexMethodButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComplexMethodButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -247,11 +255,14 @@ public class ECGFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(fourierRadioButton))
                     .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jButton3)
+                        .addGap(18, 18, 18)
+                        .addComponent(ComplexMethodButton))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(d4RadioButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(ComplexRadioButton))
-                    .addComponent(jButton3))
-                .addContainerGap(28, Short.MAX_VALUE))
+                        .addComponent(ComplexRadioButton)))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -266,7 +277,9 @@ public class ECGFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(ComplexMethodButton))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -303,7 +316,7 @@ public class ECGFrame extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(filterTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(118, Short.MAX_VALUE))
+                .addContainerGap(128, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -399,7 +412,7 @@ public class ECGFrame extends javax.swing.JFrame {
                     .addComponent(FourierDomain)
                     .addComponent(dwtPreFilter)
                     .addComponent(dwtPostFilter)
-                    .addComponent(fastICAButton, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE))
+                    .addComponent(fastICAButton, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -469,7 +482,7 @@ public class ECGFrame extends javax.swing.JFrame {
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(windowTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(88, 88, 88))
+                .addGap(98, 98, 98))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -793,6 +806,10 @@ public class ECGFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_windowTxtActionPerformed
 
+    private void ComplexMethodButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComplexMethodButtonActionPerformed
+        // TODO add your handling code here: Maurice
+    }//GEN-LAST:event_ComplexMethodButtonActionPerformed
+
     private void drawComponents(String name, double[][] components) {
 
         for (int i = 0; i < components.length; i++) {
@@ -862,7 +879,7 @@ public class ECGFrame extends javax.swing.JFrame {
 //                transformed[i] = cSig[i].mod();
 //            }
 //            return transformed; 
-        } else { // Complex wavelet transform for testing (2,1,0.5) <-- baby, (3,1,0.5) <-- mommy
+        } else { // Complex wavelet transform for testing (2,1,0.5) <-- baby
             Complex[] c = new CWT(2,1,0.5).complexTransform(samples);
             transformed = new double[c.length];
             for(int i = 0 ; i < c.length ; i++) {
@@ -956,6 +973,7 @@ public class ECGFrame extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ComplexMethodButton;
     private javax.swing.JRadioButton ComplexRadioButton;
     private javax.swing.JCheckBox FourierDomain;
     private javax.swing.JRadioButton addToRadio;
