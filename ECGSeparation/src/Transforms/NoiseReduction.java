@@ -137,14 +137,22 @@ public class NoiseReduction {
 
     public static double[] reduceNoiseDynamicT(double signal[]) {
 
-        double[] sorted = absoluteBubbleSort(signal);
-        double median = Math.abs(sorted[(int) ((sorted.length) / 4)]);
+        int n = 4;
+        
+        int significant = (int)(Math.pow(2, n-1) - 1);
+        
+        double[] tempSignal = new double[signal.length - significant];
+        System.arraycopy(signal, significant, tempSignal, 0, tempSignal.length);
+        double[] sorted = absoluteBubbleSort(tempSignal);
+        double median = Math.abs(sorted[(int) ((sorted.length) / 2.0)]);
         double delta = median / 0.6745;
 
         double threshold = delta * Math.sqrt(Math.log(signal.length));
 
         System.out.println("Dynamic Threshold = " + threshold);
-        return reduceNoiseSoftT(signal, threshold);
+        double[] sig2 = reduceNoiseSoftT(tempSignal, threshold);
+        System.arraycopy(sig2, 0, signal, significant, sig2.length);
+        return signal;
     }
 
     public static double[] reduceNoiseTomsWay(double signal[]) {

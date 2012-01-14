@@ -732,8 +732,11 @@ public class ECGFrame extends javax.swing.JFrame {
                 // signals[i] = NoiseReduction.medianFilter(signals[i], n);
                 // END TEST
 
-                if (FourierDomain.isSelected()) {
-                    signals[i] = DFT.forward(signals[i]);
+                if (dwtPreFilter.isSelected()) {
+                    // Do some noise-reduction
+                    DWT.d4CompleteTransform(signals[i]);
+                    signals[i] = NoiseReduction.reduceNoiseDynamicT(signals[i]);
+                    DWT.d4CompleteInvTransform(signals[i]);
                 }
 
                 if (complexWvlt.isSelected()) {
@@ -750,11 +753,8 @@ public class ECGFrame extends javax.swing.JFrame {
                     signals[i] = transformed;
                 }
 
-                if (dwtPreFilter.isSelected()) {
-                    // Do some noise-reduction
-                    DWT.d4CompleteTransform(signals[i]);
-                    signals[i] = NoiseReduction.reduceNoiseDynamicT(signals[i]);
-                    DWT.d4CompleteInvTransform(signals[i]);
+                if (FourierDomain.isSelected()) {
+                    signals[i] = DFT.forward(signals[i]);
                 }
             }
         }
@@ -764,8 +764,9 @@ public class ECGFrame extends javax.swing.JFrame {
 
         for (int i = 0; i < signals.length; i++) {
             if (FourierDomain.isSelected()) {
-                //signals[i] = DFT.reverse(signals[i]);
+                signals[i] = DFT.reverse(signals[i]);
             }
+
             if (dwtPostFilter.isSelected()) {
                 DWT.d4CompleteTransform(signals[i]);
                 signals[i] = NoiseReduction.reduceNoiseDynamicT(signals[i]);

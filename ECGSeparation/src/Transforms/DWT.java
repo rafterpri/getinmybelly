@@ -48,7 +48,7 @@ public class DWT {
     }
 
     /**
-     * 
+     *
      * @param w Transformation Matrix
      * @param s Signal
      * @return the transformed signal
@@ -58,10 +58,10 @@ public class DWT {
     }
 
     /**
-     * 
+     *
      * @param w the weight for the DWT
      * @param s the input signal
-     * @return  the transformed signal
+     * @return the transformed signal
      */
     public static Matrix waveletTransform(double w, Matrix s) {
         Matrix W = createW(w, s.getRowDimension());
@@ -69,7 +69,7 @@ public class DWT {
     }
 
     /**
-     * 
+     *
      * @param w the weight for the DWT
      * @param s the input signal
      * @return the transformed signal
@@ -103,6 +103,7 @@ public class DWT {
             invD4Transform(output);
             System.arraycopy(output, 0, input, 0, copylen);
         }
+        System.err.println(times + " transforms.");
     }
 
     public static void d4Transform(double[] input) {
@@ -154,10 +155,10 @@ public class DWT {
     }
 
     /**
-     * 
+     *
      * @param w weight for the DWT
      * @param n length of the input vector
-     * @return 
+     * @return
      */
     public static Matrix createW(double w, int n) {
         double[][] matrix = new double[n][n];
