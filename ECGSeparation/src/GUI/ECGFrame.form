@@ -1,4 +1,4 @@
-<?xml version="1.1" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
@@ -528,7 +528,7 @@
                           <Component id="graph2Radio" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="graph1Radio" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="6" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -608,10 +608,16 @@
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="FourierDomain" min="-2" max="-2" attributes="1"/>
-                          <Component id="dwtPreFilter" min="-2" max="-2" attributes="0"/>
-                          <Component id="dwtPostFilter" min="-2" max="-2" attributes="0"/>
                           <Component id="fastICAButton" alignment="0" pref="164" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="FourierDomain" min="-2" max="-2" attributes="1"/>
+                                  <Component id="dwtPreFilter" min="-2" max="-2" attributes="0"/>
+                                  <Component id="dwtPostFilter" min="-2" max="-2" attributes="0"/>
+                                  <Component id="complexWvlt" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -621,14 +627,17 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jScrollPane1" pref="126" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
+                              <Component id="complexWvlt" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                               <Component id="FourierDomain" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                               <Component id="dwtPreFilter" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                               <Component id="dwtPostFilter" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="jScrollPane1" pref="126" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -690,6 +699,11 @@
             <Component class="javax.swing.JCheckBox" name="dwtPostFilter">
               <Properties>
                 <Property name="text" type="java.lang.String" value="DWT post-filter"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="complexWvlt">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Complex domain"/>
               </Properties>
             </Component>
           </SubComponents>

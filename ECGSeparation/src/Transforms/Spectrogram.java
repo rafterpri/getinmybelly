@@ -14,7 +14,7 @@ public class Spectrogram {
         
         Window w = new BlackmanWindow();
         int partitions = signal.length / (window - overlap);// window;
-        double[][] specto = new double[partitions][window*2];
+        double[][] specto = new double[partitions][window/2];
         System.out.println("Partitions: " + partitions);
         for (int i = 0; i < partitions; i++) {
 
@@ -31,10 +31,10 @@ public class Spectrogram {
             System.arraycopy(signal, start, fSignals, 0, length/2);
             DoubleFFT_1D fft = new DoubleFFT_1D(length/2);
             //fSignals = DFT.DiscreteFourier(fSignals);
-            fSignals = w.timesW(fSignals); 
+            fSignals = w.timesW(fSignals); // Apply the window-function
             fft.complexForward(fSignals);
-            double[] outSignals = new double[fSignals.length/2];
-            for(int j = 0 ; j < outSignals.length ; j++) {
+            double[] outSignals = new double[fSignals.length/4];
+            for(int j = 0; j < outSignals.length / 2 ; j++) {
                 outSignals[j] = Math.sqrt(fSignals[2*j]*fSignals[2*j] + fSignals[2*j+1]*fSignals[2*j+1]);
             }
             //fSignals = DFT.forward(fSignals);
