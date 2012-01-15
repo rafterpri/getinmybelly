@@ -24,6 +24,18 @@ public class ComplexWavelet {
 		return new double[0][0];
 	}
 	
+	public static double[] complexCWT(double[] thorax, double[] abdomen) {
+		// Creating all the preprocessed data and methods that need to be used
+		fetalCWT = new CWT(2,1,0.5);
+		
+		// Maternal ECG calculation
+		
+		// Fetal ECG calculation
+		rawFetal = fetalCWT.complexTransform(abdomen);
+		
+		return new double[0];
+	}
+	
     public static double[] avgSignal(double[][] input) {
 
         for (int i = 0; i < input.length; i++) {
@@ -38,6 +50,27 @@ public class ComplexWavelet {
             av[i] /= input.length;
         }
         return DFT.reverse(av);
+    }
+    
+    public static double[] getPeaks(double[] input, int threshold) {
+    	double max = 0;
+    	double peakThreshold = 0;
+    	double[] peaks = new double[0];
+    	
+    	for(int i = 0; i < input.length; i++) {
+    		if(input[i] > max)
+    			input[i] = max;
+    	}
+    	
+    	peakThreshold = max*threshold;
+    	
+    	for(int i = 0; i < input.length; i++) {
+    		if(input[i] > peakThreshold) {
+    			
+    		}    			
+    	}
+    	
+    	return peaks;
     }
     
     public static double[] postProcess(double[] input) {
