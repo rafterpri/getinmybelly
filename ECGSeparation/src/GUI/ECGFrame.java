@@ -21,6 +21,7 @@ import javax.swing.filechooser.FileSystemView;
 public class ECGFrame extends javax.swing.JFrame {
 
     private String selectedFile;
+    private boolean synthetic = false;
     private double[] samples;
     private double[] transformed;
     private String yAxis;
@@ -60,6 +61,7 @@ public class ECGFrame extends javax.swing.JFrame {
         resetButton = new javax.swing.JButton();
         clear2Button = new javax.swing.JButton();
         clear1Button = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         graphPanel2 = new GUI.GraphPanel();
         graphPanel1 = new GUI.GraphPanel();
@@ -143,6 +145,13 @@ public class ECGFrame extends javax.swing.JFrame {
             }
         });
 
+        jButton5.setText("Synthetic");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -164,7 +173,9 @@ public class ECGFrame extends javax.swing.JFrame {
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(drawButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(resetButton)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(resetButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(clear2Button)
@@ -177,7 +188,8 @@ public class ECGFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fileTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1)
-                    .addComponent(clear1Button))
+                    .addComponent(clear1Button)
+                    .addComponent(jButton5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -283,7 +295,7 @@ public class ECGFrame extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
                     .addComponent(ComplexMethodButton))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Filters"));
@@ -379,7 +391,6 @@ public class ECGFrame extends javax.swing.JFrame {
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Blind source separation"));
 
         fastICAButton.setText("FastICA");
-        fastICAButton.setEnabled(false);
         fastICAButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fastICAButtonActionPerformed(evt);
@@ -414,7 +425,7 @@ public class ECGFrame extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, 0, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fastICAButton, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                    .addComponent(fastICAButton, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(FourierDomain)
@@ -428,7 +439,7 @@ public class ECGFrame extends javax.swing.JFrame {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addComponent(complexWvlt)
                         .addGap(2, 2, 2)
@@ -437,7 +448,7 @@ public class ECGFrame extends javax.swing.JFrame {
                         .addComponent(dwtPreFilter)
                         .addGap(4, 4, 4)
                         .addComponent(dwtPostFilter)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 25, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -518,7 +529,7 @@ public class ECGFrame extends javax.swing.JFrame {
                             .addComponent(jLabel6)
                             .addComponent(overlapTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jButton4))
-                .addGap(74, 74, 74))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -537,12 +548,14 @@ public class ECGFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -594,6 +607,12 @@ public class ECGFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_drawButtonActionPerformed
 
     private void readSamples() {
+        if (synthetic) {
+            samples = Signals.Synthetic.signal1;
+            yAxis = "mv";
+            signalName = "Synthetic signal";
+            return;
+        }
         Reader.openEDFFile(selectedFile);
         int signal = ((ComboItem) signalNamesList.getSelectedItem()).getId();
         int sigCount = Integer.parseInt(sigCountText.getText());
@@ -715,6 +734,10 @@ public class ECGFrame extends javax.swing.JFrame {
         int sigs = selItems.length;
         int components = Integer.parseInt(componentsTxt.getText());
 
+        if(synthetic) {
+            sigs = 1;
+        }
+        
         int runs = 1;
         if (sigs < components) {
             runs = components / sigs;
@@ -724,9 +747,13 @@ public class ECGFrame extends javax.swing.JFrame {
 
         for (int k = 0; k < runs; k++) {
             for (int i = (k * sigs); i < (sigs + (k * sigs)); i++) {
-                int signalId = ((ComboItem) selItems[i - (k * sigs)]).getId();
-                signals[i] = Reader.readSamples(signalId, sigCount);
-
+                
+                if (!synthetic) {
+                    int signalId = ((ComboItem) selItems[i - (k * sigs)]).getId();
+                    signals[i] = Reader.readSamples(signalId, sigCount);
+                } else {
+                    signals[i] = Signals.Synthetic.signal1;
+                }
                 // TEST
                 // int n = Integer.parseInt(filterTxt.getText());
                 // signals[i] = NoiseReduction.medianFilter(signals[i], n);
@@ -807,6 +834,14 @@ public class ECGFrame extends javax.swing.JFrame {
     private void ComplexMethodButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComplexMethodButtonActionPerformed
         // TODO add your handling code here: Maurice
     }//GEN-LAST:event_ComplexMethodButtonActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        jButton2.setEnabled(true);
+        jButton3.setEnabled(true);
+        synthetic = true;
+        readSamples();
+        drawGraph(signalName, false);
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     private void drawComponents(String name, double[][] components) {
 
@@ -1004,6 +1039,7 @@ public class ECGFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

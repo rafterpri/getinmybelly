@@ -1,6 +1,5 @@
 package Transforms;
 
-import Jama.SingularValueDecomposition;
 import Transforms.math.*;
 import java.util.Arrays;
 
