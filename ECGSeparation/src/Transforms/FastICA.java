@@ -55,7 +55,8 @@ public class FastICA {
                 for (int j = 0; j < n; j++) {
 
                     //First part of the equation
-                    double one = Vector.dot(prevW, Matrix.getVecOfCol(whitenedVectors, j));
+                    double[] column = Matrix.getVecOfCol(whitenedVectors, j);
+                    double one = Vector.dot(prevW, column);
                     one = Math.pow(one, 3);
                     double[] two = Vector.scale(one, Matrix.getVecOfCol(whitenedVectors, j));
                     firstPart = Vector.add(firstPart, two);

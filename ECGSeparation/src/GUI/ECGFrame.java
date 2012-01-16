@@ -727,7 +727,9 @@ public class ECGFrame extends javax.swing.JFrame {
 
 
         int sigCount = Integer.parseInt(sigCountText.getText());
-
+        if(synthetic) {
+            sigCount = Signals.Synthetic.signal1.length;
+        }
         Reader.openEDFFile(selectedFile);
 
         Object[] selItems = signalList.getSelectedValues();
