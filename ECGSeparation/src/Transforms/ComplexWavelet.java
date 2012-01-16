@@ -1,5 +1,7 @@
 package Transforms;
 
+import java.util.ArrayList;
+
 public class ComplexWavelet {
 	
 	private static double[] rawSignal;
@@ -52,10 +54,10 @@ public class ComplexWavelet {
         return DFT.reverse(av);
     }
     
-    public static double[] getPeaks(double[] input, int threshold) {
+    public static ArrayList<Integer> getPeaks(double[] input, int threshold) {
     	double max = 0;
     	double peakThreshold = 0;
-    	double[] peaks = new double[0];
+    	ArrayList<Integer> peaks = new ArrayList<Integer>();
     	
     	for(int i = 0; i < input.length; i++) {
     		if(input[i] > max)
@@ -66,10 +68,21 @@ public class ComplexWavelet {
     	
     	for(int i = 0; i < input.length; i++) {
     		if(input[i] > peakThreshold) {
-    			
+    			int j = i;
+    			if(input[i] < input[i+1]) {
+    				while(input[j] < input[j+1])
+    					j--;
+    				if(!peaks.contains(j))
+    					peaks.add(j);
+    			}
+    			else {
+    				while(input[j] > input[j+1])
+    					j++;
+    				if(!peaks.contains(j))
+    					peaks.add(j);
+    			}
     		}    			
-    	}
-    	
+    	}    	
     	return peaks;
     }
     
