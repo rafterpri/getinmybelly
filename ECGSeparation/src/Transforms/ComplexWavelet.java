@@ -7,6 +7,7 @@ public class ComplexWavelet {
 	private static double[] rawSignal;
 	private static Complex[] rawMaternal;
 	private static Complex[] rawFetal;
+	private static Complex[] fetal;
 	private static CWT maternalCWT;
 	private static CWT fetalCWT;
 	
@@ -34,6 +35,9 @@ public class ComplexWavelet {
 		
 		// Fetal ECG calculation
 		rawFetal = fetalCWT.complexTransform(abdomen);
+		ArrayList<Integer> peaks = new ArrayList<Integer>(getPeaks(thorax, 0.8));
+		fetal = removeMaternalPeaks(rawFetal, peaks);
+		
 		
 		return new double[0];
 	}
@@ -54,7 +58,7 @@ public class ComplexWavelet {
         return DFT.reverse(av);
     }
     
-    public static ArrayList<Integer> getPeaks(double[] input, int threshold) {
+    public static ArrayList<Integer> getPeaks(double[] input, double threshold) {
     	double max = 0;
     	double peakThreshold = 0;
     	ArrayList<Integer> peaks = new ArrayList<Integer>();
@@ -84,6 +88,21 @@ public class ComplexWavelet {
     		}    			
     	}    	
     	return peaks;
+    }
+    
+    public static Complex[] removeMaternalPeaks(Complex[] input, ArrayList<Integer> peaks) {
+    	int start;
+    	int end;
+    	Complex[] peaksRemoved = input;
+    	
+    	for(int i = 0; i < peaks.size(); i=i+2) {
+    		start = peaks.get(i);
+    		end = peaks.get(i+1);
+    		for(int j = start; j < end; j++) {
+    			peaksRemoved[j] = new Complex(0, 0);
+    		}
+    	}    	
+    	return peaksRemoved;
     }
     
     public static double[] postProcess(double[] input) {
