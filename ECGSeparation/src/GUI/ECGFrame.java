@@ -600,6 +600,7 @@ public class ECGFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void drawButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drawButtonActionPerformed
+        synthetic = false;
         jButton2.setEnabled(true);
         jButton3.setEnabled(true);
         readSamples();
@@ -835,6 +836,7 @@ public class ECGFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_windowTxtActionPerformed
 
     private void ComplexMethodButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComplexMethodButtonActionPerformed
+        ComplexWavelet cw = new ComplexWavelet();
         Reader.openEDFFile(selectedFile);
         
         int sigCount = Integer.parseInt(sigCountText.getText());
@@ -842,8 +844,10 @@ public class ECGFrame extends javax.swing.JFrame {
         yAxis = Reader.physicalDimension(0);
         double[] abdomen = Reader.readSamples(2, sigCount);
         Reader.closeEDFFile();
-        samples = ComplexWavelet.complexCWT(thorax, abdomen);
-        drawGraph("BABY", false);
+        samples = cw.complexCWT(thorax, abdomen, sigCount);
+        graphPanel1.drawGraph(thorax, yAxis, "Maternal ECG with "+cw.getMaternalHeartRate()+" bpm");
+        graphPanel2.drawGraph(cw.complexCWT(thorax, abdomen, sigCount), yAxis, "Fetal Heartbeat with "+cw.getFetalHeartRate()+" bpm");
+//        drawGraph("Fetal Heartbeat with "+cw.getFetalHeartRate()+" bpm", false);
     }//GEN-LAST:event_ComplexMethodButtonActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed

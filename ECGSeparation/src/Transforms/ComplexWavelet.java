@@ -4,30 +4,27 @@ import java.util.ArrayList;
 
 public class ComplexWavelet {
 
-    private static double[] rawSignal;
-    private static Complex[] rawMaternal;
-    private static Complex[] rawFetal;
-    private static Complex[] cFetal;
-    private static CWT maternalCWT;
-    private static CWT fetalCWT;
+    private double[] rawSignal;
+    private Complex[] rawMaternal;
+    private Complex[] rawFetal;
+    private Complex[] cFetal;
+    private CWT maternalCWT;
+    private CWT fetalCWT;
+    private double maternalHeartRate;
 
-    public static double[][] complexCWT(double[][] input) {
-        // Creating all the preprocessed data and methods that need to be used
-        rawSignal = avgSignal(input);
-        maternalCWT = new CWT(3, 1, 0.5);
-        fetalCWT = new CWT(2, 1, 0.5);
-
-        // Maternal ECG calculation
-        rawMaternal = maternalCWT.complexTransform(rawSignal);
-
-        // Fetal ECG calculation
-        rawFetal = fetalCWT.complexTransform(rawSignal);
-
-        // Post processing of both signals to detect the overlapped fetal QRS and the rejection of the misdetected QRS points
-        return new double[0][0];
+    public double getFetalHeartRate() {
+        return fetalHeartRate;
     }
 
-    public static double[] complexCWT(double[] thorax, double[] abdomen) {
+    public double getMaternalHeartRate() {
+        return maternalHeartRate;
+    }
+    private double fetalHeartRate;
+
+    public ComplexWavelet() {
+    }
+
+    public double[] complexCWT(double[] thorax, double[] abdomen, int length) {
         // Creating all the preprocessed data and methods that need to be used
         fetalCWT = new CWT(2, 1, 0.5);
 
@@ -36,15 +33,21 @@ public class ComplexWavelet {
         // Fetal ECG calculation
         rawFetal = fetalCWT.complexTransform(abdomen);
         ArrayList<Integer> peaks = getPeaks(thorax, 0.8);
+        
+        maternalHeartRate = (peaks.size() / 2.0) / (length / 1000.0)*30;
         cFetal = removeMaternalPeaks(rawFetal, peaks);
+        
         double[] fetal = new double[cFetal.length];
         for (int i = 0; i < cFetal.length; i++) {
             fetal[i] = cFetal[i].mod();
         }
+        ArrayList<Integer> fetalPeaks = getFetalPeaks(fetal);
+        System.out.println("Number of fetal heart beats: "+fetalPeaks.size());
+        fetalHeartRate = (fetalPeaks.size())/(length/1000.0)*60;
         return fetal;
     }
 
-    public static double[] avgSignal(double[][] input) {
+    public double[] avgSignal(double[][] input) {
 
         for (int i = 0; i < input.length; i++) {
             input[i] = DFT.forward(input[i]);
@@ -60,7 +63,35 @@ public class ComplexWavelet {
         return DFT.reverse(av);
     }
 
-    public static ArrayList<Integer> getPeaks(double[] input, double threshold) {
+    public ArrayList<Integer> getFetalPeaks(double[] input) {
+        ArrayList<Integer> candidates = new ArrayList<Integer>();
+        double threshold = 0.6;
+        ArrayList<Integer> peaks = new ArrayList<Integer>();
+        double peak = 0;
+        for (int i = 0; i < input.length - 5; i++) {
+            if (input[i] > peak) {
+                peak = input[i];
+            }
+        }
+        peak *= threshold;
+        for (int i = 0; i < input.length - 5; i++) {
+            if (input[i] > peak) {
+
+                while (input[i + 1] > input[i]) {
+                    i++;
+                }
+                candidates.add(i);
+                System.out.println("Peak at : " + i);
+                while(input[i] > peak) {
+                    i++;
+                }
+            }
+        }
+        
+        return candidates;
+    }
+
+    public ArrayList<Integer> getPeaks(double[] input, double threshold) {
         double max = 0;
         double peakThreshold = 0;
         ArrayList<Integer> peaks = new ArrayList<Integer>();
@@ -68,7 +99,7 @@ public class ComplexWavelet {
         for (int i = 0; i < input.length; i++) {
             if (input[i] > max) {
                 max = input[i];
-                System.out.println("new max = "+max);
+                System.out.println("new max = " + max);
             }
         }
         System.out.println("Max = " + max);
@@ -79,23 +110,21 @@ public class ComplexWavelet {
                 int j = i;
 
                 if (input[i] < input[i + 1]) {
-                    while (input[j] < input[j + 1] && j>0) {
+                    while (input[j] < input[j + 1] && j > 0) {
                         j--;
                     }
                     if (!peaks.contains(j)) {
                         peaks.add(j);
-                        System.out.println("Peak at : "+j);
                     }
                 } else {
                     while (input[j] > input[j + 1]) {
                         j++;
                     }
                     while (input[j] < input[j + 1]) {
-                    	j++;
+                        j++;
                     }
                     if (!peaks.contains(j)) {
                         peaks.add(j);
-                        System.out.println("Peak at : "+j);
                     }
                 }
             }
@@ -103,7 +132,7 @@ public class ComplexWavelet {
         return peaks;
     }
 
-    public static Complex[] removeMaternalPeaks(Complex[] input, ArrayList<Integer> peaks) {
+    public Complex[] removeMaternalPeaks(Complex[] input, ArrayList<Integer> peaks) {
         int start;
         int end;
         Complex[] peaksRemoved = input;
@@ -118,7 +147,7 @@ public class ComplexWavelet {
         return peaksRemoved;
     }
 
-    public static double[] postProcess(double[] input) {
+    public double[] postProcess(double[] input) {
 
         for (int i = 1; i < input.length - 1; i++) {
             if ((input[i + 1] - input[i]) > (1.5 * (input[i] - input[i - 1]))) {
