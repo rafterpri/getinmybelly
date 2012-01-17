@@ -90,6 +90,9 @@ public class ComplexWavelet {
                     while (input[j] > input[j + 1]) {
                         j++;
                     }
+                    while (input[j] < input[j + 1]) {
+                    	j++;
+                    }
                     if (!peaks.contains(j)) {
                         peaks.add(j);
                         System.out.println("Peak at : "+j);
