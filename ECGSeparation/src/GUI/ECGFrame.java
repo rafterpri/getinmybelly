@@ -615,6 +615,7 @@ public class ECGFrame extends javax.swing.JFrame {
         }
         Reader.openEDFFile(selectedFile);
         int signal = ((ComboItem) signalNamesList.getSelectedItem()).getId();
+        System.out.println(signal);
         int sigCount = Integer.parseInt(sigCountText.getText());
         samples = Reader.readSamples(signal, sigCount);
         yAxis = Reader.physicalDimension(signal);
@@ -834,7 +835,15 @@ public class ECGFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_windowTxtActionPerformed
 
     private void ComplexMethodButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComplexMethodButtonActionPerformed
-        // TODO add your handling code here: Maurice
+        Reader.openEDFFile(selectedFile);
+        
+        int sigCount = Integer.parseInt(sigCountText.getText());
+        double[] thorax = Reader.readSamples(0, sigCount);
+        yAxis = Reader.physicalDimension(0);
+        double[] abdomen = Reader.readSamples(2, sigCount);
+        Reader.closeEDFFile();
+        samples = ComplexWavelet.complexCWT(thorax, abdomen);
+        drawGraph("BABY", false);
     }//GEN-LAST:event_ComplexMethodButtonActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed

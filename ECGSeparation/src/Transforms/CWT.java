@@ -37,7 +37,7 @@ public class CWT {
                 integral = integral.plus(in[t].times(conjW));
             }
             cwt[b] = new Complex(weight, 0).times(integral);
-            System.out.println("CWT at " + b + ": " + cwt[b].toString());
+//            System.out.println("CWT at " + b + ": " + cwt[b].toString());
         }
         return cwt;
     }
