@@ -206,7 +206,7 @@ public class ECGFrame extends javax.swing.JFrame {
 
         graphPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Graph 2"));
         graphPanel2.setPreferredSize(new java.awt.Dimension(412, 270));
-        jPanel2.add(graphPanel2, java.awt.BorderLayout.SOUTH);
+        jPanel2.add(graphPanel2, java.awt.BorderLayout.CENTER);
 
         graphPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Graph 1"));
         graphPanel1.setPreferredSize(new java.awt.Dimension(412, 270));
