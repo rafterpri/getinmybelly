@@ -3,9 +3,8 @@ package Transforms;
 import Transforms.math.*;
 import java.util.Arrays;
 
-
 /**
- * 
+ *
  * @author Tom Pepels
  */
 public class FastICA {
@@ -23,7 +22,9 @@ public class FastICA {
     private static int iterationLimit = 10;
 
     /**
-     * Finds a certain number of indepentent components of the input signal using fastica
+     * Finds a certain number of indepentent components of the input signal
+     * using fastica
+     *
      * @param input the input signals
      * @param maxIterations maximum number of iterations
      * @param epsilon level of accuracy
@@ -49,7 +50,7 @@ public class FastICA {
             for (int c = 0; c < noComponents; c++) {
                 //Step 1
                 double[] prevW = Matrix.getVecOfRow(oldB, c);
-                
+
                 double[] firstPart = new double[m];
 
                 for (int j = 0; j < n; j++) {
@@ -73,6 +74,17 @@ public class FastICA {
 
                 // End of step 2
 
+                
+                // IF YOU USE THIS PART DONT USE THE symmetric decorrelation by orthonormalisation
+                // orthogonalisation of the vector
+                for (int j = 0; j < c; ++j) {
+                    w = Vector.sub(w, Vector.scale(Vector.dot(w, B[j]), B[j]));
+                }
+                // orthonormalisation of the vector
+                w = Vector.scale(1 / Math.sqrt(Vector.dot(w, w)), w);
+                // END OF OPTIONAL PART
+                
+                
                 // write new vector to the matrix
                 for (int j = 0; j < m; ++j) {
                     B[c][j] = w[j];
@@ -80,9 +92,9 @@ public class FastICA {
             }
 
             // symmetric decorrelation by orthonormalisation
-            B = Matrix.mult(
-                    powerSymmMatrix(Matrix.square(B), -0.5),
-                    B);
+//            B = Matrix.mult(
+//                    powerSymmMatrix(Matrix.square(B), -0.5),
+//                    B);
 
             double matrixDelta = deltaMatrices(B, oldB);
             System.out.println("Matrix delta: " + matrixDelta);
@@ -97,7 +109,7 @@ public class FastICA {
 
     /**
      * Finds the major component of the input signal using fastica
-     * 
+     *
      * @param input the input signals
      * @param maxIterations maximum number of iterations
      * @param epsilon level of accuracy
@@ -163,20 +175,19 @@ public class FastICA {
         EigenValueDecompositionSymm eigenDeco = new EigenValueDecompositionSymm(covarianceMatrix);
         E = eigenDeco.getEigenVectors();
         eigenValues = eigenDeco.getEigenValues();
-        
+
         //Eigenvaluefilter
-        /* System.out.println("Eigenvalues: ");
-        for(int i = 0 ;i < eigenValues.length ; i++)
-            System.out.println((i+1)+": "+eigenValues[i]);
-        EigenValueFilter ev = new BelowEVFilter(0.01, false);
-        ev.passEigenValues(eigenValues, E);
-        eigenValues = ev.getEigenValues();
-        System.out.println("New Eigenvalues: ");
-        for(int i = 0 ;i < eigenValues.length ; i++)
-            System.out.println((i+1)+": "+eigenValues[i]);
-        E = ev.getEigenVectors(); */
+        /*
+         * System.out.println("Eigenvalues: "); for(int i = 0 ;i <
+         * eigenValues.length ; i++) System.out.println((i+1)+":
+         * "+eigenValues[i]); EigenValueFilter ev = new BelowEVFilter(0.01,
+         * false); ev.passEigenValues(eigenValues, E); eigenValues =
+         * ev.getEigenValues(); System.out.println("New Eigenvalues: "); for(int
+         * i = 0 ;i < eigenValues.length ; i++) System.out.println((i+1)+":
+         * "+eigenValues[i]); E = ev.getEigenVectors();
+         */
         // Continue with new eigenvalues and vectors
-        
+
         // calculate the resulting vectors
         resVectors = Matrix.mult(Matrix.transpose(E), vectorsZeroMean);
 
@@ -194,6 +205,7 @@ public class FastICA {
 
     /**
      * Calculates the mean vector from a set of vectors.
+     *
      * @param inVectors the set of vectors
      * @return the resulting mean vector
      */
@@ -212,8 +224,8 @@ public class FastICA {
     }
 
     /**
-     * Calculates a difference measure of two matrices
-     * relative to their size.
+     * Calculates a difference measure of two matrices relative to their size.
+     *
      * @param mat1 the first matrix
      * @param mat2 the second matrix
      * @return the difference measure
@@ -235,6 +247,7 @@ public class FastICA {
 
     /**
      * Calculates the power of a symmetric matrix.
+     *
      * @param inMatrix the symmetric matrix
      * @param power the power
      * @return the resulting matrix

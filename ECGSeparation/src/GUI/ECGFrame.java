@@ -120,7 +120,7 @@ public class ECGFrame extends javax.swing.JFrame {
             }
         });
 
-        sigCountText.setText("2048");
+        sigCountText.setText("4096");
 
         jLabel2.setText("Signal count:");
 
@@ -432,7 +432,7 @@ public class ECGFrame extends javax.swing.JFrame {
                             .addComponent(dwtPreFilter)
                             .addComponent(dwtPostFilter)
                             .addComponent(complexWvlt))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 61, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -555,7 +555,7 @@ public class ECGFrame extends javax.swing.JFrame {
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 66, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -729,7 +729,7 @@ public class ECGFrame extends javax.swing.JFrame {
 
 
         int sigCount = Integer.parseInt(sigCountText.getText());
-        if(synthetic) {
+        if (synthetic) {
             sigCount = Signals.Synthetic.signal1.length;
         }
         Reader.openEDFFile(selectedFile);
@@ -738,10 +738,10 @@ public class ECGFrame extends javax.swing.JFrame {
         int sigs = selItems.length;
         int components = Integer.parseInt(componentsTxt.getText());
 
-        if(synthetic) {
+        if (synthetic) {
             sigs = 1;
         }
-        
+
         int runs = 1;
         if (sigs < components) {
             runs = components / sigs;
@@ -751,7 +751,7 @@ public class ECGFrame extends javax.swing.JFrame {
 
         for (int k = 0; k < runs; k++) {
             for (int i = (k * sigs); i < (sigs + (k * sigs)); i++) {
-                
+
                 if (!synthetic) {
                     int signalId = ((ComboItem) selItems[i - (k * sigs)]).getId();
                     signals[i] = Reader.readSamples(signalId, sigCount);
@@ -771,12 +771,7 @@ public class ECGFrame extends javax.swing.JFrame {
                 }
 
                 if (complexWvlt.isSelected()) {
-                    Complex[] c = null;
-                    if (k % 2 == 0) {
-                        c = new CWT(2, 1, 0.5).complexTransform(signals[i]);
-                    } else {
-                        c = new CWT(3, 1, 0.5).complexTransform(signals[i]);
-                    }
+                    Complex[] c = new CWT(2, 1, 0.5).complexTransform(signals[i]);
                     transformed = new double[c.length];
                     for (int z = 0; z < c.length; z++) {
                         transformed[z] = c[z].mod();
@@ -838,15 +833,15 @@ public class ECGFrame extends javax.swing.JFrame {
     private void ComplexMethodButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComplexMethodButtonActionPerformed
         ComplexWavelet cw = new ComplexWavelet();
         Reader.openEDFFile(selectedFile);
-        
+
         int sigCount = Integer.parseInt(sigCountText.getText());
         double[] thorax = Reader.readSamples(0, sigCount);
         yAxis = Reader.physicalDimension(0);
         double[] abdomen = Reader.readSamples(2, sigCount);
         Reader.closeEDFFile();
         samples = cw.complexCWT(thorax, abdomen, sigCount);
-        graphPanel1.drawGraph(thorax, yAxis, "Maternal ECG with "+cw.getMaternalHeartRate()+" bpm");
-        graphPanel2.drawGraph(cw.complexCWT(thorax, abdomen, sigCount), yAxis, "Fetal Heartbeat with "+cw.getFetalHeartRate()+" bpm");
+        graphPanel1.drawGraph(thorax, yAxis, "Maternal ECG with " + cw.getMaternalHeartRate() + " bpm");
+        graphPanel2.drawGraph(cw.complexCWT(thorax, abdomen, sigCount), yAxis, "Fetal Heartbeat with " + cw.getFetalHeartRate() + " bpm");
 //        drawGraph("Fetal Heartbeat with "+cw.getFetalHeartRate()+" bpm", false);
     }//GEN-LAST:event_ComplexMethodButtonActionPerformed
 
